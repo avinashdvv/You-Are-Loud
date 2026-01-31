@@ -42,7 +42,12 @@ your-are-loud/
 │   └── notifications/         # Notification management
 │
 ├── docs/                      # Documentation
-│   └── architecture.md        # System architecture
+│   ├── README.md              # Documentation index
+│   ├── quick-start.md         # Quick start guide
+│   ├── architecture.md        # System architecture
+│   ├── monorepo-structure.md  # Detailed structure guide
+│   ├── contributing.md        # Contribution guidelines
+│   └── tech-spec/             # Platform technical specs
 │
 ├── scripts/                   # Build & utility scripts
 │   ├── setup.sh              # Initial setup
@@ -51,7 +56,6 @@ your-are-loud/
 │
 ├── package.json              # Root package (workspace)
 ├── pnpm-workspace.yaml       # PNPM workspace config
-├── MONOREPO_STRUCTURE.md     # Detailed structure guide
 └── README.md                 # This file
 ```
 
@@ -101,85 +105,65 @@ All platforms use **identical algorithms** to ensure consistent behavior:
 4. **Threshold Check** → Compare against user threshold
 5. **Cooldown** → 3-second minimum between warnings
 
-See [docs/architecture.md](docs/architecture.md) for detailed architecture documentation.
+See [Architecture Overview](docs/architecture.md) for detailed architecture documentation.
 
 ## 🚀 Quick Start
 
-### Prerequisites
+**📖 See [Quick Start Guide](docs/quick-start.md) for detailed setup instructions.**
 
-**For all platforms:**
-- Node.js 18+ (for shared packages)
-- pnpm 8+ (package manager)
+### TL;DR
 
-**Platform-specific:**
-- **macOS**: Xcode 14+, Swift 5.7+
-- **Windows**: Visual Studio 2022, .NET 8+
-- **iOS/Android**: React Native CLI, CocoaPods (iOS)
-- **Chrome**: Chrome browser (for testing)
-
-### Installation
-
-1. **Clone the repository:**
-   ```bash
-   git clone <repo-url>
-   cd your-are-loud
-   ```
-
-2. **Run setup script:**
-   ```bash
-   ./scripts/setup.sh
-   ```
-   
-   This will:
-   - Install all JavaScript dependencies
-   - Build shared TypeScript packages
-   - Check for platform-specific tools
-
-3. **Build shared packages:**
-   ```bash
-   pnpm install
-   pnpm run build
-   ```
-
-### Platform-Specific Setup
-
-#### macOS (Ready to Use)
 ```bash
-cd apps/macos
-open your-are-loud.xcodeproj
-# Press Cmd+R to build and run
-```
+# Clone and setup
+git clone <repo-url>
+cd your-are-loud
+./scripts/setup.sh
 
-#### Windows (Skeleton - Requires Initialization)
-```bash
-cd apps/windows
-# Follow README.md to create .NET MAUI project
-```
+# Build shared packages
+pnpm install
+pnpm run build
 
-#### iOS/Android (Skeleton - Requires Initialization)
-```bash
+# Run a platform (example: mobile)
 cd apps/mobile
-# Follow README.md to initialize React Native project
 npm install
 npm run android  # or npm run ios
 ```
 
-#### Chrome Extension (Skeleton - Requires Initialization)
-```bash
-cd apps/chrome-extension
-# Follow README.md to initialize extension project
-```
+### Prerequisites
+
+- Node.js 18+ and pnpm 8+ (all platforms)
+- Platform-specific tools (see [Quick Start Guide](docs/quick-start.md))
+
+### Platform-Specific Setup
+
+See platform documentation for detailed setup:
+
+- **macOS**: [macOS Tech Spec](docs/tech-spec/macos.md)
+- **Windows**: [Windows Tech Spec](docs/tech-spec/windows.md)
+- **Mobile**: [Mobile Tech Spec](docs/tech-spec/mobile.md)
+- **Chrome**: [Chrome Extension Tech Spec](docs/tech-spec/chrome-extension.md)
 
 ## 📚 Documentation
 
+**📖 [Complete Documentation Index](docs/README.md)**
+
+### Quick Links
+
 | Document | Description |
 |----------|-------------|
-| [MONOREPO_STRUCTURE.md](MONOREPO_STRUCTURE.md) | Complete monorepo structure and organization |
-| [docs/architecture.md](docs/architecture.md) | System architecture and design decisions |
-| [apps/macos/README.md](apps/macos/README.md) | macOS app documentation |
-| [apps/windows/README.md](apps/windows/README.md) | Windows app setup guide |
-| [apps/mobile/README.md](apps/mobile/README.md) | iOS & Android React Native guide |
-| [apps/chrome-extension/README.md](apps/chrome-extension/README.md) | Chrome extension guide |
+| [Quick Start Guide](docs/quick-start.md) | Get started in 5 minutes |
+| [Architecture Overview](docs/architecture.md) | System architecture and design decisions |
+| [Monorepo Structure](docs/monorepo-structure.md) | Complete monorepo organization |
+| [Contributing Guide](docs/contributing.md) | How to contribute to the project |
+
+### Platform Documentation
+
+| Platform | Documentation |
+|----------|---------------|
+| **Mobile (iOS & Android)** | [Mobile Tech Spec](docs/tech-spec/mobile.md) |
+| **Chrome Extension** | [Chrome Extension Tech Spec](docs/tech-spec/chrome-extension.md) |
+| **macOS** | [macOS Tech Spec](docs/tech-spec/macos.md) |
+| **Windows** | [Windows Tech Spec](docs/tech-spec/windows.md) |
 
 ## 🔧 Development
 
@@ -359,9 +343,11 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 📧 Contact & Support
 
-- 📖 Documentation: See `docs/` folder
-- 🐛 Issues: Open a GitHub issue
-- 💬 Discussions: GitHub Discussions
+- 📖 **Documentation**: [Complete Documentation Index](docs/README.md)
+- 🚀 **Quick Start**: [Quick Start Guide](docs/quick-start.md)
+- 🤝 **Contributing**: [Contributing Guide](docs/contributing.md)
+- 🐛 **Issues**: Open a GitHub issue
+- 💬 **Discussions**: GitHub Discussions
 
 ---
 

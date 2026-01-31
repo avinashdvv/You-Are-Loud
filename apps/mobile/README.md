@@ -1,45 +1,49 @@
 # Your Are Loud - Mobile App
 
+> **📖 For complete documentation, see [Mobile Technical Specification](../../docs/tech-spec/mobile.md)**
+
 Cross-platform React Native application for iOS and Android that monitors your voice volume and provides real-time feedback.
 
-## Features
-
-- Real-time voice volume monitoring
-- Adjustable volume threshold
-- Visual volume meter
-- Push notifications when speaking too loudly
-- Warning counter with statistics
-
-## Prerequisites
-
-- Node.js >= 18
-- React Native development environment set up
-- For iOS: Xcode and CocoaPods
-- For Android: Android Studio and Android SDK
-
-## Installation
+## Quick Start
 
 ```bash
 # Install dependencies
 npm install
 
-# For iOS only
+# For iOS: Install CocoaPods
 cd ios && pod install && cd ..
-```
 
-## Running the App
-
-### Android
-
-```bash
+# Run on Android
 npm run android
-```
 
-### iOS
-
-```bash
+# Run on iOS
 npm run ios
 ```
+
+## Prerequisites
+
+- Node.js >= 18
+- React Native development environment
+- **iOS**: Xcode 14+, CocoaPods
+- **Android**: Android Studio, Android SDK
+
+## Project Structure
+
+```
+apps/mobile/
+├── src/          # Shared React Native code (both platforms)
+├── android/      # Android native code
+├── ios/          # iOS native code
+└── package.json
+```
+
+## Key Features
+
+- ✅ **Unified codebase** - Single source code for iOS & Android
+- ✅ Real-time voice monitoring
+- ✅ Adjustable volume threshold
+- ✅ Push notifications when too loud
+- ✅ Warning counter and statistics
 
 ## Development
 
@@ -54,55 +58,25 @@ npm run lint
 npm test
 ```
 
-## Project Structure
+## Documentation
 
-```
-apps/mobile/
-├── src/
-│   ├── components/     # Reusable UI components
-│   ├── contexts/       # React contexts for state management
-│   ├── hooks/          # Custom React hooks
-│   ├── screens/        # Screen components
-│   └── services/       # Platform services
-├── android/            # Android native code
-├── ios/                # iOS native code (to be initialized)
-├── App.tsx             # Root component
-└── index.js            # App entry point
-```
+For comprehensive documentation including:
+- Architecture details
+- Why we unified iOS/Android
+- Technical specifications
+- API documentation
+- Build & deployment
+- Troubleshooting
+
+**👉 See [Mobile Technical Specification](../../docs/tech-spec/mobile.md)**
 
 ## Shared Packages
 
-This app uses shared packages from the monorepo:
-
-- `@your-are-loud/core` - Core logic and threshold detection
-- `@your-are-loud/audio-processing` - Audio processing utilities
+Uses monorepo shared packages:
+- `@your-are-loud/core` - Core logic
+- `@your-are-loud/audio-processing` - Audio algorithms
 - `@your-are-loud/notifications` - Notification management
-
-## Permissions
-
-### Android
-
-- `RECORD_AUDIO` - Required for voice monitoring
-- `POST_NOTIFICATIONS` - Required for push notifications (Android 13+)
-
-### iOS
-
-- `NSMicrophoneUsageDescription` - Required for voice monitoring
-- Notification permissions requested at runtime
-
-## Building for Production
-
-### Android
-
-```bash
-cd android
-./gradlew assembleRelease
-```
-
-### iOS
-
-Use Xcode to archive and distribute the app.
 
 ## License
 
-See root LICENSE file.
+MIT - See root LICENSE file
