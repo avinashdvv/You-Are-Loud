@@ -47,6 +47,8 @@ your-are-loud/
 │   ├── architecture.md        # System architecture
 │   ├── monorepo-structure.md  # Detailed structure guide
 │   ├── contributing.md        # Contribution guidelines
+│   ├── MARKETING_GUIDELINES.md # Marketing strategy & brand guidelines
+│   ├── product-spec/          # Product requirements (non-technical)
 │   └── tech-spec/             # Platform technical specs
 │
 ├── scripts/                   # Build & utility scripts
@@ -147,7 +149,27 @@ See platform documentation for detailed setup:
 
 **📖 [Complete Documentation Index](docs/README.md)**
 
-### Quick Links
+### For Non-Technical Readers (Product Specs & Marketing)
+
+**New here? Start with the Product Requirements Documents (PRDs):**
+
+| Platform | Product Spec | What You'll Learn |
+|----------|--------------|-------------------|
+| 🌐 **Chrome Extension** | [PRD](docs/product-spec/chrome-extension-prd.md) | What it does, who it's for, why sponsor |
+| 🍎 **macOS App** | [PRD](docs/product-spec/macos-prd.md) | Native Mac experience, menu bar integration |
+| 📱 **Mobile Apps** | [PRD](docs/product-spec/mobile-prd.md) | iOS & Android, on-the-go monitoring |
+| 🪟 **Windows App** | [PRD](docs/product-spec/windows-prd.md) | Enterprise-friendly, system tray integration |
+
+**→ [PRD Overview](docs/product-spec/README.md)** - Compare all platforms, understand the project vision
+
+**Want to help market or sponsor?**
+
+| Document | What You'll Learn |
+|----------|-------------------|
+| 📣 **[Marketing Guidelines](docs/MARKETING_GUIDELINES.md)** | Complete marketing strategy, brand guidelines, and sponsorship info |
+| ⚡ **[Marketing Quick Start](docs/MARKETING_QUICK_START.md)** | Essential marketing info in 5 minutes |
+
+### For Developers (Technical Specs)
 
 | Document | Description |
 |----------|-------------|
@@ -156,14 +178,14 @@ See platform documentation for detailed setup:
 | [Monorepo Structure](docs/monorepo-structure.md) | Complete monorepo organization |
 | [Contributing Guide](docs/contributing.md) | How to contribute to the project |
 
-### Platform Documentation
+### Platform Technical Documentation
 
-| Platform | Documentation |
-|----------|---------------|
-| **Mobile (iOS & Android)** | [Mobile Tech Spec](docs/tech-spec/mobile.md) |
-| **Chrome Extension** | [Chrome Extension Tech Spec](docs/tech-spec/chrome-extension.md) |
-| **macOS** | [macOS Tech Spec](docs/tech-spec/macos.md) |
-| **Windows** | [Windows Tech Spec](docs/tech-spec/windows.md) |
+| Platform | Technical Spec | For Developers |
+|----------|----------------|----------------|
+| **Mobile (iOS & Android)** | [Tech Spec](docs/tech-spec/mobile.md) | React Native, native modules |
+| **Chrome Extension** | [Tech Spec](docs/tech-spec/chrome-extension.md) | Manifest V3, Web Audio API |
+| **macOS** | [Tech Spec](docs/tech-spec/macos.md) | Swift, SwiftUI, AVFoundation |
+| **Windows** | [Tech Spec](docs/tech-spec/windows.md) | C#, .NET, NAudio |
 
 ## 🔧 Development
 

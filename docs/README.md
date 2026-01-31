@@ -14,8 +14,16 @@ docs/
 ├── contributing.md                # Contribution guidelines
 ├── implementation-summary.md      # Implementation details and status
 ├── refactoring-summary.md         # Mobile app refactoring details
+├── MARKETING_GUIDELINES.md        # Comprehensive marketing strategy & brand guidelines
 │
-└── tech-spec/                     # Platform-specific technical specs
+├── product-spec/                  # Product Requirements Documents (non-technical)
+│   ├── README.md                  # PRD overview and comparison
+│   ├── chrome-extension-prd.md    # Chrome extension product spec
+│   ├── macos-prd.md               # macOS app product spec
+│   ├── mobile-prd.md              # Mobile apps product spec
+│   └── windows-prd.md             # Windows app product spec
+│
+└── tech-spec/                     # Platform-specific technical specs (for developers)
     ├── chrome-extension.md        # Chrome extension specification
     ├── mobile.md                  # iOS & Android (React Native)
     ├── macos.md                   # macOS native app
@@ -26,6 +34,12 @@ docs/
 
 ### New to the Project?
 
+**Non-Technical (Users, Sponsors, Curious):**
+1. **Start here:** [Product Requirements Documents (PRDs)](./prd/README.md)
+2. **Pick your platform:** Read the PRD for Chrome, macOS, Mobile, or Windows
+3. **Try it:** [Quick Start Guide](./quick-start.md)
+
+**Technical (Developers):**
 1. **Start here:** [Quick Start Guide](./quick-start.md)
 2. **Understand the structure:** [Monorepo Structure](./monorepo-structure.md)
 3. **Learn the architecture:** [Architecture Overview](./architecture.md)
@@ -33,17 +47,35 @@ docs/
 
 ### Want to Contribute?
 
+**Code Contributions:**
 1. Read: [Contributing Guide](./contributing.md)
 2. Review: [Architecture Overview](./architecture.md)
 3. Choose a platform and read its tech spec
 4. Follow the contribution workflow
 
+**Non-Code Contributions:**
+1. Read: [PRDs](./prd/README.md) to understand the vision
+2. Check: [Contributing Guide](./contributing.md) for ways to help
+3. Share feedback, write tutorials, spread the word
+
 ## 📖 Core Documentation
+
+### For Everyone (Non-Technical)
+
+| Document | Description | Audience |
+|----------|-------------|----------|
+| [Product Requirements (PRD Overview)](./product-spec/README.md) | What each app does and why | Users, sponsors, anyone curious |
+| [Chrome Extension PRD](./product-spec/chrome-extension-prd.md) | Browser extension product spec | Chrome users, potential sponsors |
+| [macOS App PRD](./product-spec/macos-prd.md) | Mac app product spec | Mac users, potential sponsors |
+| [Mobile App PRD](./product-spec/mobile-prd.md) | iOS & Android product spec | Mobile users, potential sponsors |
+| [Windows App PRD](./product-spec/windows-prd.md) | Windows app product spec | Windows users, potential sponsors |
+| [Marketing Guidelines](./MARKETING_GUIDELINES.md) | Complete marketing strategy and brand guidelines | Marketers, sponsors, contributors |
+
+### For Developers (Technical)
 
 | Document | Description | When to Read |
 |----------|-------------|--------------|
 | [Documentation Structure](./DOCUMENTATION_STRUCTURE.md) | How docs are organized | Understanding documentation |
-| [Deduplication Summary](./DEDUPLICATION_SUMMARY.md) | How we eliminated duplicate docs | Understanding doc cleanup |
 | [Quick Start](./quick-start.md) | 5-minute setup guide | First time setup |
 | [Architecture](./architecture.md) | System design and patterns | Understanding the system |
 | [Monorepo Structure](./monorepo-structure.md) | Folder organization and design principles | Navigating the codebase |
@@ -117,7 +149,31 @@ docs/
 
 ## 🔍 Finding Information
 
-### By Role
+### By Audience
+
+**🙋 Potential User**
+- Start: [PRD Overview](./product-spec/README.md)
+- Pick: Your platform's PRD (Chrome, macOS, Mobile, or Windows)
+- Focus: What problem it solves, features, privacy
+
+**💰 Potential Sponsor**
+- Start: [PRD Overview](./product-spec/README.md)
+- Read: [Marketing Guidelines](./MARKETING_GUIDELINES.md) → "Sponsorship Marketing"
+- See: What your sponsorship enables
+- Focus: Project values, sustainability, impact
+
+**📝 Blogger/Media**
+- Start: [PRD Overview](./product-spec/README.md)
+- Read: [Marketing Guidelines](./MARKETING_GUIDELINES.md) → "PR & Media Relations"
+- Pick: Platform PRDs for accurate info
+- Focus: Unique value proposition, privacy-first approach, open source model
+
+**📣 Marketing/Growth Contributor**
+- Start: [Marketing Guidelines](./MARKETING_GUIDELINES.md)
+- Read: [PRD Overview](./product-spec/README.md) for product understanding
+- Focus: Brand identity, messaging, channels, content strategy
+
+### By Developer Role
 
 **👨‍💻 Frontend Developer (Mobile)**
 - Start: [Mobile Tech Spec](./tech-spec/mobile.md)
@@ -170,6 +226,11 @@ docs/
 | **Testing changes** | Platform tech spec → "Testing Strategy" |
 | **Understanding recent changes** | [Refactoring Summary](./refactoring-summary.md) |
 | **Contributing code** | [Contributing Guide](./contributing.md) |
+| **Marketing the project** | [Marketing Guidelines](./MARKETING_GUIDELINES.md) |
+| **Writing marketing content** | [Marketing Guidelines](./MARKETING_GUIDELINES.md) → "Content Strategy" |
+| **Launching on new platform** | [Marketing Guidelines](./MARKETING_GUIDELINES.md) → "Platform-Specific Marketing" |
+| **Seeking sponsorships** | [Marketing Guidelines](./MARKETING_GUIDELINES.md) → "Sponsorship Marketing" |
+| **PR and media outreach** | [Marketing Guidelines](./MARKETING_GUIDELINES.md) → "PR & Media Relations" |
 
 ## 🎓 Learning Paths
 
@@ -309,6 +370,19 @@ Found an error? Have a suggestion?
 
 ## 📊 Documentation Status
 
+### Product Requirements Documents (Non-Technical)
+
+| Document | Status | Last Major Update |
+|----------|--------|-------------------|
+| PRD Overview | ✅ Complete | Jan 2026 |
+| Chrome Extension PRD | ✅ Complete | Jan 2026 |
+| macOS App PRD | ✅ Complete | Jan 2026 |
+| Mobile App PRD | ✅ Complete | Jan 2026 |
+| Windows App PRD | ✅ Complete | Jan 2026 |
+| Marketing Guidelines | ✅ Complete | Jan 2026 |
+
+### Technical Documentation (For Developers)
+
 | Document | Status | Last Major Update |
 |----------|--------|-------------------|
 | Quick Start | ✅ Complete | Jan 2026 |
@@ -326,6 +400,13 @@ Found an error? Have a suggestion?
 
 ### Most Used Documents
 
+**Non-Technical:**
+- 📋 [PRD Overview](./product-spec/README.md) - Start here if you're not a developer
+- 💰 [Sponsorship Info](./product-spec/README.md#open-source--sponsorship-model) - How to support the project
+- 🔒 [Privacy](./product-spec/README.md) - Our privacy-first commitment
+- 📣 [Marketing Guidelines](./MARKETING_GUIDELINES.md) - Complete marketing strategy
+
+**Technical:**
 - 🚀 [Quick Start](./quick-start.md) - Get started in 5 minutes
 - 📱 [Mobile Tech Spec](./tech-spec/mobile.md) - iOS & Android development
 - 🌐 [Chrome Extension](./tech-spec/chrome-extension.md) - Browser extension
