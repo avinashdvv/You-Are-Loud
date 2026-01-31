@@ -6,7 +6,7 @@ import { DEFAULT_VOLUME_THRESHOLD, MIN_VOLUME_THRESHOLD, MAX_VOLUME_THRESHOLD } 
 import type { VolumeLevel, VolumeInfo } from './types';
 
 export class ThresholdDetector {
-  private threshold: number;
+  private threshold: number = DEFAULT_VOLUME_THRESHOLD;
 
   constructor(threshold: number = DEFAULT_VOLUME_THRESHOLD) {
     this.setThreshold(threshold);
