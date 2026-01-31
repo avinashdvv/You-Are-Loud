@@ -79,12 +79,12 @@ fi
 
 # React Native setup check
 echo "📱 Checking React Native setup..."
-if [ -d "apps/ios" ] && [ -f "apps/ios/package.json" ]; then
-    echo "✅ iOS/Android React Native app structure ready"
-    echo "   To initialize: cd apps/ios && npx react-native@latest init YourAreLoud"
+if [ -d "apps/mobile" ] && [ -f "apps/mobile/package.json" ]; then
+    echo "✅ Mobile (iOS/Android) React Native app found"
+    echo "   To run: cd apps/mobile && npm install && npm run ios (or android)"
 else
-    echo "⚠️  React Native apps not initialized yet"
-    echo "   See apps/ios/README.md and apps/android/README.md"
+    echo "⚠️  Mobile React Native app not found"
+    echo "   See apps/mobile/README.md"
 fi
 echo ""
 
@@ -109,14 +109,13 @@ echo "1. Shared packages are built and ready to use"
 echo "2. Review platform-specific READMEs:"
 echo "   - apps/macos/README.md"
 echo "   - apps/windows/README.md"
-echo "   - apps/ios/README.md"
-echo "   - apps/android/README.md"
+echo "   - apps/mobile/README.md (iOS & Android)"
 echo "   - apps/chrome-extension/README.md"
 echo ""
 echo "3. Build platform apps:"
 echo "   - macOS: Open apps/macos/your-are-loud.xcodeproj in Xcode"
 echo "   - Windows: See apps/windows/README.md"
-echo "   - React Native: See apps/ios/README.md"
+echo "   - Mobile: cd apps/mobile && npm install && npm run ios/android"
 echo "   - Chrome: See apps/chrome-extension/README.md"
 echo ""
 echo "4. Read documentation:"

@@ -20,8 +20,7 @@ This monorepo contains implementations for **all major platforms**:
 |----------|-----------|--------|----------|
 | 🍎 **macOS** | Swift, SwiftUI | ✅ Complete | `apps/macos/` |
 | 🪟 **Windows** | C#, .NET MAUI | 📝 Skeleton | `apps/windows/` |
-| 📱 **iOS** | React Native | 📝 Skeleton | `apps/ios/` |
-| 🤖 **Android** | React Native | 📝 Skeleton | `apps/android/` |
+| 📱 **iOS & Android** | React Native | 📝 Skeleton | `apps/mobile/` |
 | 🌐 **Chrome Extension** | TypeScript, Manifest V3 | 📝 Skeleton | `apps/chrome-extension/` |
 
 ## 📁 Repository Structure
@@ -31,8 +30,10 @@ your-are-loud/
 ├── apps/                      # Platform-specific applications
 │   ├── macos/                 # macOS native app (Swift)
 │   ├── windows/               # Windows native app (C#/.NET MAUI)
-│   ├── ios/                   # iOS app (React Native)
-│   ├── android/               # Android app (React Native)
+│   ├── mobile/                # iOS & Android app (React Native)
+│   │   ├── src/               # Shared React Native code
+│   │   ├── android/           # Android native code
+│   │   └── ios/               # iOS native code
 │   └── chrome-extension/      # Chrome extension (TypeScript)
 │
 ├── packages/                  # Shared TypeScript packages
@@ -157,8 +158,10 @@ cd apps/windows
 
 #### iOS/Android (Skeleton - Requires Initialization)
 ```bash
-cd apps/ios  # or apps/android
+cd apps/mobile
 # Follow README.md to initialize React Native project
+npm install
+npm run android  # or npm run ios
 ```
 
 #### Chrome Extension (Skeleton - Requires Initialization)
@@ -175,8 +178,7 @@ cd apps/chrome-extension
 | [docs/architecture.md](docs/architecture.md) | System architecture and design decisions |
 | [apps/macos/README.md](apps/macos/README.md) | macOS app documentation |
 | [apps/windows/README.md](apps/windows/README.md) | Windows app setup guide |
-| [apps/ios/README.md](apps/ios/README.md) | iOS/React Native guide |
-| [apps/android/README.md](apps/android/README.md) | Android/React Native guide |
+| [apps/mobile/README.md](apps/mobile/README.md) | iOS & Android React Native guide |
 | [apps/chrome-extension/README.md](apps/chrome-extension/README.md) | Chrome extension guide |
 
 ## 🔧 Development
@@ -256,8 +258,11 @@ dotnet publish -c Release -r win-x64 --self-contained
 
 **React Native:**
 ```bash
-cd apps/ios
-npx react-native run-ios --configuration Release
+cd apps/mobile
+# For iOS
+npm run ios -- --configuration Release
+# For Android
+cd android && ./gradlew assembleRelease
 ```
 
 **Chrome Extension:**

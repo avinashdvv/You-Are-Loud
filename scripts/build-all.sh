@@ -26,16 +26,16 @@ if [ -d "apps/chrome-extension" ] && [ -f "apps/chrome-extension/package.json" ]
 fi
 
 # Build React Native (iOS/Android) - if initialized
-if [ -d "apps/ios" ] && [ -f "apps/ios/package.json" ]; then
-    echo "📱 Building React Native apps..."
-    cd apps/ios
+if [ -d "apps/mobile" ] && [ -f "apps/mobile/package.json" ]; then
+    echo "📱 Building React Native mobile app..."
+    cd apps/mobile
     npm install
     echo "✅ React Native dependencies installed"
     
-    if [[ "$OSTYPE" == "darwin"* ]]; then
+    if [[ "$OSTYPE" == "darwin"* ]] && [ -d "ios" ]; then
         echo "📱 Installing iOS pods..."
         cd ios
-        pod install 2>/dev/null || echo "⚠️  CocoaPods not configured"
+        pod install 2>/dev/null || echo "⚠️  CocoaPods not configured (iOS native code needs initialization)"
         cd ..
     fi
     cd ..

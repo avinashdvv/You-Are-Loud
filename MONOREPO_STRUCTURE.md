@@ -7,8 +7,10 @@ your-are-loud/
 ├── apps/                           # Platform-specific applications
 │   ├── macos/                      # macOS native app (Swift/SwiftUI)
 │   ├── windows/                    # Windows native app (C#/.NET MAUI or C++/WinUI3)
-│   ├── ios/                        # iOS app (React Native)
-│   ├── android/                    # Android app (React Native)
+│   ├── mobile/                     # iOS & Android app (React Native - shared codebase)
+│   │   ├── src/                    # Shared React Native TypeScript code
+│   │   ├── android/                # Android-specific native code (Java/Kotlin)
+│   │   └── ios/                    # iOS-specific native code (Swift/Objective-C)
 │   └── chrome-extension/           # Chrome extension (TypeScript/Manifest V3)
 │
 ├── packages/                       # Shared code packages
@@ -67,7 +69,7 @@ your-are-loud/
 ### 2. **Native First**
 - macOS: Swift/SwiftUI (existing)
 - Windows: C#/.NET MAUI or C++/WinUI3 (no Electron)
-- iOS/Android: React Native (shared codebase)
+- iOS/Android: React Native (single shared codebase in `apps/mobile/`)
 - Chrome Extension: TypeScript/Manifest V3
 
 ### 3. **Shared Logic Extraction**
@@ -151,8 +153,7 @@ pnpm run build
 # Platform-specific setup
 cd apps/macos && open your-are-loud.xcodeproj
 cd apps/windows && dotnet restore
-cd apps/ios && npx react-native setup-ios
-cd apps/android && ./gradlew build
+cd apps/mobile && npm install  # Single React Native app for both iOS & Android
 cd apps/chrome-extension && pnpm install
 ```
 
@@ -173,11 +174,9 @@ cd apps/macos && xcodebuild
 # Windows
 cd apps/windows && dotnet build
 
-# iOS
-cd apps/ios && npx react-native run-ios
-
-# Android
-cd apps/android && npx react-native run-android
+# iOS & Android (unified mobile app)
+cd apps/mobile && npm run ios     # For iOS
+cd apps/mobile && npm run android # For Android
 
 # Chrome Extension
 cd apps/chrome-extension && pnpm build
@@ -201,11 +200,13 @@ cd apps/chrome-extension && pnpm build
 - **Notifications**: Windows Notifications API
 
 ### iOS/Android (New - React Native)
-- **Location**: `apps/ios/` and `apps/android/`
-- **Shared Code**: JavaScript/TypeScript business logic
-- **Audio Library**: `react-native-audio-record` or `expo-av`
-- **Notifications**: `@react-native-community/push-notification-ios` / Firebase Cloud Messaging
+- **Location**: `apps/mobile/` (unified app with shared code)
+- **Shared Code**: All JavaScript/TypeScript/React code in `src/`
+- **Native Folders**: `android/` and `ios/` for platform-specific native code only
+- **Audio Library**: `react-native-audio-record`
+- **Notifications**: `react-native-push-notification` (Android) + `@react-native-community/push-notification-ios` (iOS)
 - **Permissions**: `react-native-permissions`
+- **Benefits**: No code duplication, single codebase for both platforms
 
 ### Chrome Extension (New)
 - **Location**: `apps/chrome-extension/`

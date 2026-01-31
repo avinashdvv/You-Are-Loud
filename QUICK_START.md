@@ -7,7 +7,7 @@ This guide helps you get started with the Your Are Loud monorepo.
 A **monorepo** containing voice monitoring applications for:
 - 🍎 macOS (Swift) - ✅ **Working**
 - 🪟 Windows (C#/.NET MAUI) - 📝 Skeleton
-- 📱 iOS/Android (React Native) - 📝 Skeleton
+- 📱 iOS & Android (React Native - unified app) - 📝 Skeleton
 - 🌐 Chrome Extension (TypeScript) - 📝 Skeleton
 
 Plus **shared TypeScript packages** for business logic reuse.
@@ -44,8 +44,7 @@ your-are-loud/
 ├── apps/                    ← Platform apps
 │   ├── macos/              ← ✅ Working macOS app
 │   ├── windows/            ← Windows app guide
-│   ├── ios/                ← iOS app guide
-│   ├── android/            ← Android app guide
+│   ├── mobile/             ← iOS & Android (shared codebase)
 │   └── chrome-extension/   ← Chrome ext guide
 │
 ├── packages/               ← Shared TypeScript code
@@ -73,10 +72,10 @@ open your-are-loud.xcodeproj
 4. Implement using provided code examples
 
 ### Option 3: Build Mobile Apps
-1. Read: `apps/ios/README.md`
-2. Install React Native dependencies
-3. Initialize RN project
-4. Implement using provided code examples
+1. Read: `apps/mobile/README.md`
+2. Install React Native dependencies: `cd apps/mobile && npm install`
+3. Run iOS: `npm run ios` or Android: `npm run android`
+4. Single codebase for both platforms!
 
 ### Option 4: Build Chrome Extension
 1. Read: `apps/chrome-extension/README.md`

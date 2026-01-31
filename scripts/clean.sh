@@ -47,12 +47,13 @@ if [ -d "apps/windows" ]; then
 fi
 
 # Clean React Native
-if [ -d "apps/ios" ]; then
-    echo "🗑️  Cleaning React Native..."
-    rm -rf apps/ios/node_modules 2>/dev/null || true
-    rm -rf apps/ios/ios/Pods 2>/dev/null || true
-    rm -rf apps/ios/android/build 2>/dev/null || true
-    rm -rf apps/ios/android/app/build 2>/dev/null || true
+if [ -d "apps/mobile" ]; then
+    echo "🗑️  Cleaning React Native mobile app..."
+    rm -rf apps/mobile/node_modules 2>/dev/null || true
+    rm -rf apps/mobile/ios/Pods 2>/dev/null || true
+    rm -rf apps/mobile/android/build 2>/dev/null || true
+    rm -rf apps/mobile/android/app/build 2>/dev/null || true
+    rm -rf apps/mobile/android/.gradle 2>/dev/null || true
     echo "✅ React Native cleaned"
     echo ""
 fi

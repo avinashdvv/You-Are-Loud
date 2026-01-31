@@ -1,5 +1,6 @@
 packages:
   - 'packages/*'
-  - 'apps/ios'
-  - 'apps/android'
+  - 'apps/mobile'
+  - 'apps/macos'
+  - 'apps/windows'
   - 'apps/chrome-extension'
