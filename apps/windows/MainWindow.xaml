@@ -1,0 +1,86 @@
+<Window x:Class="YourAreLoud.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Voice Monitor" Height="350" Width="300"
+        ResizeMode="CanMinimize">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Grid.Row="0" Text="🎙️ Voice Monitor" 
+                   FontSize="20" FontWeight="Bold" 
+                   HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+        <!-- Volume Meter -->
+        <StackPanel Grid.Row="1" Margin="0,0,0,20">
+            <TextBlock Text="Current Volume" FontSize="12" Margin="0,0,0,5"/>
+            <Border Height="20" Background="#E0E0E0" CornerRadius="5">
+                <Rectangle x:Name="VolumeBar" 
+                          HorizontalAlignment="Left" 
+                          Fill="{Binding VolumeColor}"
+                          Width="{Binding VolumeBarWidth}"
+                          RadiusX="5" RadiusY="5"/>
+            </Border>
+        </StackPanel>
+
+        <!-- Threshold Slider -->
+        <StackPanel Grid.Row="2" Margin="0,0,0,20">
+            <TextBlock FontSize="12" Margin="0,0,0,5">
+                <Run Text="Warning Threshold: "/>
+                <Run Text="{Binding VolumeThreshold, StringFormat=F2}"/>
+            </TextBlock>
+            <Slider Minimum="0.3" Maximum="1.0" 
+                    Value="{Binding VolumeThreshold, Mode=TwoWay}"
+                    TickFrequency="0.1" IsSnapToTickEnabled="True"/>
+        </StackPanel>
+
+        <!-- Warning Count -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" 
+                    HorizontalAlignment="Center" Margin="0,0,0,20">
+            <TextBlock Text="Warnings: " FontSize="12"/>
+            <TextBlock Text="{Binding WarningCount}" 
+                      FontSize="12" Foreground="Red" FontWeight="Bold"/>
+            <Button Content="Reset" Margin="10,0,0,0" 
+                   Command="{Binding ResetCountCommand}"
+                   Visibility="{Binding HasWarnings, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        </StackPanel>
+
+        <Separator Grid.Row="4" Margin="0,0,0,20"/>
+
+        <!-- Control Buttons -->
+        <StackPanel Grid.Row="6" VerticalAlignment="Bottom">
+            <Button x:Name="MonitorButton"
+                    Height="40" FontSize="14" FontWeight="Bold"
+                    Command="{Binding ToggleMonitoringCommand}">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsMonitoring}" Value="True">
+                                <Setter Property="Content" Value="⏹ Stop Monitoring"/>
+                                <Setter Property="Background" Value="#F44336"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsMonitoring}" Value="False">
+                                <Setter Property="Content" Value="▶️ Start Monitoring"/>
+                                <Setter Property="Background" Value="#4CAF50"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            
+            <Button Content="Quit" Height="35" Margin="0,10,0,0"
+                   Command="{Binding QuitCommand}"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,103 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  width: 280px;
+}
+
+.popup-container {
+  padding: 20px;
+}
+
+h1 {
+  font-size: 20px;
+  text-align: center;
+  margin: 0 0 20px 0;
+}
+
+.volume-meter {
+  margin-bottom: 20px;
+}
+
+.volume-label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.volume-bar-container {
+  height: 20px;
+  background-color: #E0E0E0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.volume-bar {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.1s ease-in-out;
+}
+
+.threshold-control {
+  margin-bottom: 20px;
+}
+
+.threshold-control label {
+  display: block;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.threshold-control input[type="range"] {
+  width: 100%;
+}
+
+.warning-count {
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.warning-count .count {
+  font-weight: bold;
+  color: #F44336;
+  font-size: 16px;
+}
+
+.reset-btn {
+  margin-left: 10px;
+  padding: 4px 12px;
+  font-size: 12px;
+  background-color: #E0E0E0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.reset-btn:hover {
+  background-color: #D0D0D0;
+}
+
+.monitor-button {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.monitor-button:hover {
+  opacity: 0.9;
+}
+
+.monitor-button.start {
+  background-color: #4CAF50;
+}
+
+.monitor-button.stop {
+  background-color: #F44336;
+}

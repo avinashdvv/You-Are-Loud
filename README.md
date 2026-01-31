@@ -1,141 +1,390 @@
-# 🔊 Your Are Loud - Voice Monitor App
+# 🔊 Your Are Loud - Monorepo
 
-A macOS menu bar app that monitors your microphone during video calls and warns you when your voice gets too loud.
+A cross-platform voice monitoring application that alerts you when you're speaking too loudly during video calls.
 
-## Features
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-✅ **Real-time Voice Monitoring** - Continuously monitors your microphone input
-✅ **Visual Volume Meter** - Color-coded display (Green → Yellow → Red)
-✅ **Adjustable Threshold** - Customize sensitivity to your needs (0.3 - 1.0)
-✅ **System Notifications** - Alerts you when speaking too loudly
-✅ **Warning Counter** - Tracks how many times you've been too loud
-✅ **Menu Bar Integration** - Runs discreetly in your menu bar
-✅ **Privacy-Focused** - All processing happens locally on your Mac
+## 🌟 Overview
 
-## How to Use
+**Your Are Loud** monitors your microphone in real-time and sends you notifications when your voice exceeds a customizable volume threshold. Perfect for:
+- 📞 Video calls (Zoom, Teams, Meet, etc.)
+- 🎙️ Podcasting and streaming
+- 🏠 Working from home (noisy environment awareness)
+- 🗣️ Voice training and awareness
 
-### Opening the Project
+## 🚀 Supported Platforms
 
-1. **Navigate to the project directory:**
+This monorepo contains implementations for **all major platforms**:
+
+| Platform | Technology | Status | Location |
+|----------|-----------|--------|----------|
+| 🍎 **macOS** | Swift, SwiftUI | ✅ Complete | `apps/macos/` |
+| 🪟 **Windows** | C#, .NET MAUI | 📝 Skeleton | `apps/windows/` |
+| 📱 **iOS** | React Native | 📝 Skeleton | `apps/ios/` |
+| 🤖 **Android** | React Native | 📝 Skeleton | `apps/android/` |
+| 🌐 **Chrome Extension** | TypeScript, Manifest V3 | 📝 Skeleton | `apps/chrome-extension/` |
+
+## 📁 Repository Structure
+
+```
+your-are-loud/
+├── apps/                      # Platform-specific applications
+│   ├── macos/                 # macOS native app (Swift)
+│   ├── windows/               # Windows native app (C#/.NET MAUI)
+│   ├── ios/                   # iOS app (React Native)
+│   ├── android/               # Android app (React Native)
+│   └── chrome-extension/      # Chrome extension (TypeScript)
+│
+├── packages/                  # Shared TypeScript packages
+│   ├── core/                  # Core business logic & types
+│   ├── audio-processing/      # Audio processing algorithms
+│   └── notifications/         # Notification management
+│
+├── docs/                      # Documentation
+│   └── architecture.md        # System architecture
+│
+├── scripts/                   # Build & utility scripts
+│   ├── setup.sh              # Initial setup
+│   ├── build-all.sh          # Build all platforms
+│   └── clean.sh              # Clean build artifacts
+│
+├── package.json              # Root package (workspace)
+├── pnpm-workspace.yaml       # PNPM workspace config
+├── MONOREPO_STRUCTURE.md     # Detailed structure guide
+└── README.md                 # This file
+```
+
+## 🎯 Key Features
+
+### Common Features Across All Platforms
+
+- ✅ **Real-time Audio Monitoring** - Continuous microphone monitoring
+- ✅ **Visual Volume Meter** - Color-coded display (Green → Yellow → Red)
+- ✅ **Adjustable Threshold** - Customize sensitivity (0.3 - 1.0)
+- ✅ **Smart Notifications** - Alerts when too loud (with cooldown)
+- ✅ **Warning Counter** - Track how many times you've been loud
+- ✅ **Privacy-First** - All processing happens locally, no data sent anywhere
+
+### Platform-Specific Features
+
+| Feature | macOS | Windows | iOS | Android | Chrome |
+|---------|-------|---------|-----|---------|--------|
+| Menu Bar Integration | ✅ | ❌ | ❌ | ❌ | ✅ |
+| System Tray | ❌ | 🔜 | ❌ | ❌ | ❌ |
+| Background Monitoring | ✅ | 🔜 | 🔜 | 🔜 | ✅ |
+| Native Notifications | ✅ | 🔜 | 🔜 | 🔜 | ✅ |
+| System Beep | ✅ | 🔜 | 🔜 | 🔜 | ❌ |
+
+## 🏗️ Architecture
+
+### Shared Business Logic
+
+The monorepo uses **shared TypeScript packages** for core business logic:
+
+```typescript
+@your-are-loud/core              // Constants, types, threshold detection
+@your-are-loud/audio-processing  // RMS calculation, normalization
+@your-are-loud/notifications     // Cooldown management, warnings
+```
+
+### Platform Integration
+
+- **JavaScript/TypeScript Platforms** (React Native, Chrome): Direct usage of shared packages
+- **Native Platforms** (macOS, Windows): Reimplemented algorithms in native languages (Swift, C#)
+
+All platforms use **identical algorithms** to ensure consistent behavior:
+
+1. **Audio Capture** → Platform-specific (AVAudioEngine, NAudio, Web Audio API)
+2. **RMS Calculation** → `sqrt(sum(samples²) / count)`
+3. **Normalization** → `(20*log10(rms) + 50) / 50` (clamped to 0.0-1.0)
+4. **Threshold Check** → Compare against user threshold
+5. **Cooldown** → 3-second minimum between warnings
+
+See [docs/architecture.md](docs/architecture.md) for detailed architecture documentation.
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+**For all platforms:**
+- Node.js 18+ (for shared packages)
+- pnpm 8+ (package manager)
+
+**Platform-specific:**
+- **macOS**: Xcode 14+, Swift 5.7+
+- **Windows**: Visual Studio 2022, .NET 8+
+- **iOS/Android**: React Native CLI, CocoaPods (iOS)
+- **Chrome**: Chrome browser (for testing)
+
+### Installation
+
+1. **Clone the repository:**
    ```bash
-   cd /Users/vdevarakonda/Desktop/Learning/your-are-loud
+   git clone <repo-url>
+   cd your-are-loud
    ```
 
-2. **Open in Xcode:**
+2. **Run setup script:**
    ```bash
-   open your-are-loud.xcodeproj
+   ./scripts/setup.sh
    ```
    
-   Or double-click `your-are-loud.xcodeproj` in Finder.
+   This will:
+   - Install all JavaScript dependencies
+   - Build shared TypeScript packages
+   - Check for platform-specific tools
 
-### Building and Running
+3. **Build shared packages:**
+   ```bash
+   pnpm install
+   pnpm run build
+   ```
 
-1. In Xcode, select your Mac as the build target (top toolbar)
-2. Press **⌘R** (Cmd+R) to build and run
-3. Grant microphone permission when prompted
-4. Grant notification permission when prompted
-5. The app icon will appear in your menu bar (look for 🌊 waveform icon)
+### Platform-Specific Setup
 
-### Using the App
-
-1. **Click the menu bar icon** to open the control panel
-2. **Click "Start Monitoring"** to begin voice monitoring
-3. **Speak normally** - the volume meter will show your voice level
-4. **Adjust the threshold slider** if needed:
-   - Lower value = more sensitive (warns earlier)
-   - Higher value = less sensitive (warns only when very loud)
-5. When you speak too loudly:
-   - 🔊 System beep sound
-   - 📱 Notification: "You're Too Loud!"
-   - Warning counter increments
-6. **Click "Stop Monitoring"** when you're done
-
-## System Requirements
-
-- macOS 13.0 (Ventura) or later
-- Xcode 14.0 or later
-- Microphone access permission
-- Notification permission
-
-## Technical Details
-
-### Technologies Used
-
-- **SwiftUI** - Modern declarative UI framework
-- **AVFoundation** - Audio capture and processing
-- **AVAudioEngine** - Real-time audio monitoring
-- **UserNotifications** - System notifications
-
-### How It Works
-
-1. **Audio Capture**: Uses `AVAudioEngine` to capture microphone input
-2. **Signal Processing**: Calculates RMS (Root Mean Square) and converts to normalized volume (0.0 - 1.0)
-3. **Threshold Detection**: Compares current volume against user-defined threshold
-4. **Warning System**: Shows notifications with 3-second cooldown between warnings
-5. **Visual Feedback**: Real-time color-coded volume meter
-
-### Privacy & Security
-
-- ✅ All audio processing happens **locally** on your device
-- ✅ No audio data is stored or transmitted
-- ✅ No internet connection required
-- ✅ Audio is analyzed in real-time and immediately discarded
-
-## Customization
-
-You can customize the app by modifying these values in `AudioMonitor.swift`:
-
-```swift
-@Published var volumeThreshold: Float = 0.7  // Default warning threshold
-private let warningCooldown: TimeInterval = 3.0  // Seconds between warnings
+#### macOS (Ready to Use)
+```bash
+cd apps/macos
+open your-are-loud.xcodeproj
+# Press Cmd+R to build and run
 ```
 
-In `AudioMonitor.swift`, you can also customize the notification:
-
-```swift
-content.title = "🔊 You're Too Loud!"
-content.body = "Please lower your voice during the call"
+#### Windows (Skeleton - Requires Initialization)
+```bash
+cd apps/windows
+# Follow README.md to create .NET MAUI project
 ```
 
-## Troubleshooting
+#### iOS/Android (Skeleton - Requires Initialization)
+```bash
+cd apps/ios  # or apps/android
+# Follow README.md to initialize React Native project
+```
 
-### App doesn't appear in menu bar
-- Make sure you've granted microphone permissions in System Settings
-- Try restarting the app
+#### Chrome Extension (Skeleton - Requires Initialization)
+```bash
+cd apps/chrome-extension
+# Follow README.md to initialize extension project
+```
 
-### No notifications appearing
-- Check System Settings → Notifications → your-are-loud
-- Ensure notifications are enabled
+## 📚 Documentation
 
-### Microphone not working
-- System Settings → Privacy & Security → Microphone
-- Enable access for "your-are-loud"
+| Document | Description |
+|----------|-------------|
+| [MONOREPO_STRUCTURE.md](MONOREPO_STRUCTURE.md) | Complete monorepo structure and organization |
+| [docs/architecture.md](docs/architecture.md) | System architecture and design decisions |
+| [apps/macos/README.md](apps/macos/README.md) | macOS app documentation |
+| [apps/windows/README.md](apps/windows/README.md) | Windows app setup guide |
+| [apps/ios/README.md](apps/ios/README.md) | iOS/React Native guide |
+| [apps/android/README.md](apps/android/README.md) | Android/React Native guide |
+| [apps/chrome-extension/README.md](apps/chrome-extension/README.md) | Chrome extension guide |
 
-### Volume meter not moving
-- Test your microphone in another app to ensure it's working
-- Check your input device in System Settings → Sound → Input
+## 🔧 Development
 
-## Building for Distribution
+### Working with Shared Packages
 
-To create a standalone app:
+The shared packages are in TypeScript and used by React Native and Chrome extension:
 
-1. In Xcode: Product → Archive
-2. Distribute App → Copy App
-3. Share the .app file
+```bash
+# Build all shared packages
+pnpm run build
 
-**Note**: For distribution outside the App Store, users may need to:
-- Right-click the app → Open (first time only)
-- Grant microphone and notification permissions
+# Run tests
+pnpm run test
 
-## Contributing
+# Lint code
+pnpm run lint
 
-Feel free to modify and improve this app for your needs!
+# Format code
+pnpm run format
+```
 
-## License
+### Adding a New Shared Package
 
-Free to use and modify.
+1. Create directory: `packages/new-package/`
+2. Add `package.json` with `name: "@your-are-loud/new-package"`
+3. Implement in TypeScript
+4. Add to workspace in `pnpm-workspace.yaml`
+5. Build: `cd packages/new-package && pnpm build`
+
+### Platform-Specific Development
+
+Each platform has its own build system and workflow:
+
+- **macOS**: Use Xcode (Cmd+R to run)
+- **Windows**: Use Visual Studio or `dotnet build`
+- **React Native**: Use `npx react-native run-ios/android`
+- **Chrome**: Use `npm run build` then load unpacked
+
+## 🧪 Testing
+
+### Shared Packages
+```bash
+# Run all tests
+pnpm run test:all
+
+# Test specific package
+cd packages/core && pnpm test
+```
+
+### Platform Apps
+Each platform has its own testing approach:
+- **macOS**: XCTest (Xcode → Product → Test)
+- **Windows**: xUnit/MSTest
+- **React Native**: Jest + React Native Testing Library
+- **Chrome**: Jest + Puppeteer
+
+## 📦 Building for Distribution
+
+### Build All Platforms
+```bash
+./scripts/build-all.sh
+```
+
+### Platform-Specific Builds
+
+**macOS:**
+```bash
+# In Xcode: Product → Archive → Distribute
+```
+
+**Windows:**
+```bash
+cd apps/windows
+dotnet publish -c Release -r win-x64 --self-contained
+```
+
+**React Native:**
+```bash
+cd apps/ios
+npx react-native run-ios --configuration Release
+```
+
+**Chrome Extension:**
+```bash
+cd apps/chrome-extension
+npm run build
+# Create .zip from dist/ folder
+```
+
+## 🤝 Contributing
+
+### Adding a New Platform
+
+1. Create directory: `apps/new-platform/`
+2. Follow the structure of existing platforms
+3. Use shared packages where possible
+4. Add README.md with setup instructions
+5. Update this README and MONOREPO_STRUCTURE.md
+
+### Code Standards
+
+- **TypeScript**: ESLint + Prettier (auto-formatted)
+- **Swift**: Follow Swift style guide
+- **C#**: Follow C# conventions
+- **Git**: Conventional commits
+
+### Pull Request Process
+
+1. Create feature branch: `git checkout -b feature/new-feature`
+2. Make changes and test thoroughly
+3. Update documentation if needed
+4. Run linters: `pnpm run lint`
+5. Submit PR with clear description
+
+## 🔒 Privacy & Security
+
+- ✅ **No Data Collection** - Zero analytics or tracking
+- ✅ **Local Processing** - All audio processed on-device
+- ✅ **No Audio Storage** - Audio never saved or transmitted
+- ✅ **Open Source** - Fully auditable code
+- ✅ **No Network Requests** - 100% offline operation
+
+## 📊 Project Status
+
+### ✅ Completed
+- [x] Monorepo structure
+- [x] Shared TypeScript packages (core, audio-processing, notifications)
+- [x] macOS app (fully functional)
+- [x] Comprehensive documentation
+
+### 🔜 In Progress
+- [ ] Windows app implementation
+- [ ] React Native mobile apps
+- [ ] Chrome extension implementation
+
+### 🎯 Roadmap
+- [ ] CI/CD pipelines for all platforms
+- [ ] Automated tests
+- [ ] Distribution to app stores
+- [ ] Settings sync across devices (optional)
+- [ ] Advanced features (ML-based threshold, analytics)
+
+## 🐛 Troubleshooting
+
+### Build Issues
+```bash
+# Clean everything and start fresh
+./scripts/clean.sh
+./scripts/setup.sh
+```
+
+### Microphone Not Working
+- Check system permissions for microphone access
+- macOS: System Settings → Privacy & Security → Microphone
+- Windows: Settings → Privacy → Microphone
+
+### Package Installation Fails
+```bash
+# Clear pnpm cache
+pnpm store prune
+# Reinstall
+pnpm install
+```
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Inspired by the need for better audio awareness during remote work
+- Built with modern cross-platform technologies
+- Monorepo architecture inspired by industry best practices
+
+## 📧 Contact & Support
+
+- 📖 Documentation: See `docs/` folder
+- 🐛 Issues: Open a GitHub issue
+- 💬 Discussions: GitHub Discussions
 
 ---
 
-**Made with ❤️ to help maintain a peaceful voice during video calls**
-# You-Are-Loud
+**Made with ❤️ for peaceful video calls and better audio awareness**
+
+## 🚀 Quick Commands
+
+```bash
+# Setup
+./scripts/setup.sh
+
+# Build everything
+./scripts/build-all.sh
+
+# Clean everything
+./scripts/clean.sh
+
+# Build shared packages only
+pnpm run build
+
+# Run tests
+pnpm run test:all
+
+# Lint and format
+pnpm run lint
+pnpm run format
+```
+
+---
+
+⭐ **Star this repo if you find it useful!**

@@ -1,0 +1,131 @@
+# === Root Gitignore for Your Are Loud Monorepo ===
+
+# ===========================
+# Node / JavaScript / TypeScript
+# ===========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+.turbo/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ===========================
+# macOS App (Swift/Xcode)
+# ===========================
+# Xcode
+apps/macos/xcuserdata/
+apps/macos/*.xcuserstate
+apps/macos/*.xcworkspace/xcuserdata/
+apps/macos/DerivedData/
+apps/macos/build/
+apps/macos/.build/
+
+# Swift Package Manager
+apps/macos/.swiftpm/
+apps/macos/Package.resolved
+
+# CocoaPods
+apps/macos/Pods/
+apps/macos/Podfile.lock
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ===========================
+# Windows App (.NET/C#)
+# ===========================
+apps/windows/bin/
+apps/windows/obj/
+apps/windows/*.user
+apps/windows/*.suo
+apps/windows/*.cache
+apps/windows/.vs/
+apps/windows/packages/
+apps/windows/*.nupkg
+
+# ===========================
+# React Native (iOS/Android)
+# ===========================
+# iOS
+apps/ios/ios/Pods/
+apps/ios/ios/build/
+apps/ios/ios/.xcode.env.local
+apps/ios/ios/Podfile.lock
+apps/ios/ios/*.xcworkspace/xcuserdata/
+apps/ios/ios/*.xcuserstate
+
+# Android
+apps/android/android/.gradle/
+apps/android/android/build/
+apps/android/android/app/build/
+apps/android/android/local.properties
+apps/android/android/.cxx/
+apps/android/android/*.keystore
+apps/android/android/*.jks
+
+# React Native
+apps/ios/.expo/
+apps/android/.expo/
+apps/ios/metro.config.js.bak
+apps/android/metro.config.js.bak
+
+# ===========================
+# Chrome Extension
+# ===========================
+apps/chrome-extension/dist/
+apps/chrome-extension/build/
+apps/chrome-extension/web-ext-artifacts/
+apps/chrome-extension/*.zip
+apps/chrome-extension/*.crx
+apps/chrome-extension/*.pem
+
+# ===========================
+# Testing
+# ===========================
+coverage/
+*.lcov
+.nyc_output/
+test-results/
+playwright-report/
+
+# ===========================
+# Logs
+# ===========================
+*.log
+logs/
+
+# ===========================
+# Temporary files
+# ===========================
+*.tmp
+*.temp
+tmp/
+temp/
+
+# ===========================
+# CI/CD
+# ===========================
+.github/workflows/secrets/
