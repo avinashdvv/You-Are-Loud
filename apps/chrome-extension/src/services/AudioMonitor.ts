@@ -54,6 +54,9 @@ export class AudioMonitor {
       this.audioContext.close();
       this.audioContext = null;
     }
+
+    // Clear tab color overlay when stopping
+    this.sendTabColorChange(false);
   }
 
   private processAudio(callback: (volume: number) => void): void {
@@ -61,6 +64,7 @@ export class AudioMonitor {
 
     const bufferLength = this.analyserNode.frequencyBinCount;
     const dataArray = new Float32Array(bufferLength);
+    let wasOverThreshold = false;
 
     const analyze = () => {
       if (!this.isMonitoring || !this.analyserNode) return;
@@ -77,8 +81,19 @@ export class AudioMonitor {
       callback(normalizedVolume);
 
       // Check threshold
-      if (this.thresholdDetector.exceedsThreshold(normalizedVolume)) {
+      const isOverThreshold = this.thresholdDetector.exceedsThreshold(normalizedVolume);
+      
+      if (isOverThreshold) {
+        if (!wasOverThreshold) {
+          // Just crossed threshold, show red immediately
+          this.sendTabColorChange(true);
+        }
         this.checkAndShowWarning();
+        wasOverThreshold = true;
+      } else if (wasOverThreshold) {
+        // Volume dropped below threshold, hide red
+        this.sendTabColorChange(false);
+        wasOverThreshold = false;
       }
 
       // Continue processing
@@ -86,6 +101,15 @@ export class AudioMonitor {
     };
 
     analyze();
+  }
+
+  private sendTabColorChange(showRed: boolean): void {
+    // Send message to background to change tab color
+    chrome.runtime.sendMessage({ 
+      type: showRed ? 'SHOW_TAB_RED' : 'HIDE_TAB_RED'
+    }).catch(() => {
+      // Ignore errors if background script is not ready
+    });
   }
 
   private checkAndShowWarning(): void {

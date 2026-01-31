@@ -1,0 +1,641 @@
+# Cursor AI Rules for "Your Are Loud" Project
+
+## Quick Reference: Tech Spec Locations
+
+| App/Component | Tech Spec Location | README Location |
+|---------------|-------------------|-----------------|
+| Chrome Extension | `docs/tech-spec/chrome-extension.md` | `apps/chrome-extension/README.md` |
+| Android App | `docs/tech-spec/android.md` | `apps/android/README.md` |
+| iOS App | `docs/tech-spec/ios.md` | `apps/ios/README.md` |
+| macOS App | `docs/tech-spec/macos.md` | `apps/macos/README.md` |
+| Windows App | `docs/tech-spec/windows.md` | `apps/windows/README.md` |
+| Core Package | N/A | `packages/core/README.md` |
+| Audio Processing | N/A | `packages/audio-processing/README.md` |
+| Notifications | N/A | `packages/notifications/README.md` |
+| Overall Architecture | `docs/architecture.md` | Root `README.md` |
+
+**Rule:** When you modify code in any app, you MUST update its corresponding tech spec.
+
+**Tech Spec Status:**
+- ✅ Chrome Extension - COMPLETE
+- 🚧 Android - INCOMPLETE (needs completion)
+- 🚧 iOS - INCOMPLETE (needs completion)
+- 🚧 macOS - INCOMPLETE (needs completion)
+- 🚧 Windows - INCOMPLETE (needs completion)
+
+**When working on incomplete tech specs:** Fill in the placeholder sections as you implement features.
+
+---
+
+## What Should Be in Each Tech Spec
+
+Every app's tech spec should include:
+
+1. **Overview** - Purpose, key features, technology stack
+2. **Architecture** - System architecture diagram, component responsibilities
+3. **Component Specifications** - Detailed specs for each major component
+4. **Data Flow** - How data flows through the app (diagrams + explanations)
+5. **API Documentation** - Function signatures, parameters, return types
+6. **Audio Processing** - How audio monitoring works (if applicable)
+7. **Storage/State Management** - Data persistence, state structure
+8. **Platform-Specific Details** - Native APIs, permissions, platform quirks
+9. **Development Guide** - Setup, build, debug instructions
+10. **Testing Strategy** - What and how to test
+11. **Troubleshooting** - Common issues and solutions
+12. **Change Log** - Version history of significant changes
+
+**See `docs/tech-spec/chrome-extension.md` as a comprehensive example.**
+
+---
+
+## Documentation Workflow
+
+### Before Starting Work on Any App
+
+1. **Check the app's tech spec status** (see table above)
+2. **If incomplete (🚧):** Fill in relevant sections as you implement
+3. **If complete (✅):** Keep it updated with your changes
+
+### During Development
+
+1. **Make code changes** in the app
+2. **Document as you go** - Don't wait until the end
+3. **Update architecture diagrams** if structure changes
+4. **Add troubleshooting tips** for issues you encounter
+
+### Before Committing
+
+1. **Verify tech spec is updated** with your changes
+2. **Increment "Last Updated" date**
+3. **Add entry to "Change Log"** section
+4. **Build successfully** - ensure docs and code are in sync
+
+### Example Commit with Documentation
+
+```bash
+# Good commit message that includes doc updates
+git commit -m "feat(android): implement audio monitoring service
+
+- Add AudioService with native module bridge
+- Implement RMS calculation in native code
+- Add permission handling for RECORD_AUDIO
+- Create useAudioMonitoring hook
+
+Docs updated:
+- Updated docs/tech-spec/android.md:
+  - Added AudioService API documentation
+  - Added native module bridge diagram
+  - Updated audio processing pipeline section
+  - Updated permissions section
+"
+```
+
+---
+
+## Documentation Update Requirements
+
+### CRITICAL: Update Documentation on Architecture Changes
+
+Whenever making changes to any app, **YOU MUST UPDATE** the corresponding tech spec documentation.
+
+---
+
+### App-Specific Tech Spec Requirements
+
+**Important:** Each app has its own tech spec. When you modify an app, you MUST update only that app's tech spec (not all of them).
+
+#### 1. Chrome Extension (`apps/chrome-extension/`)
+
+**If you modify:**
+- Component structure (popup, background, offscreen, content script)
+- Message protocol (add/remove/modify message types)
+- Data structures or storage schema
+- Audio processing pipeline
+- Chrome API usage
+- Build configuration (webpack, manifest)
+- Permission requirements
+
+**Then you MUST update:**
+- `docs/tech-spec/chrome-extension.md`
+  - Update relevant sections
+  - Update architecture diagrams if structure changed
+  - Update message protocol tables
+  - Update API documentation
+  - Increment "Last Updated" date at top
+  - Add change to "Change Log" section
+
+**Example Updates:**
+```
+If adding new message type:
+1. Add to "Message Protocol" section
+2. Add to "Message Types Reference" table
+3. Update message flow diagrams if applicable
+4. Update component specifications that send/receive it
+```
+
+---
+
+#### 2. Android App (`apps/android/`)
+
+**If you modify:**
+- App architecture or component structure
+- Audio monitoring service implementation
+- React Native bridge/native modules
+- Android-specific audio APIs
+- Permission handling
+- UI components or screens
+- State management (Context/hooks)
+
+**Then you MUST update:**
+- `docs/tech-spec/android.md`
+  - Update architecture diagrams
+  - Update native module specifications
+  - Update audio processing implementation
+  - Update permission requirements
+  - Increment "Last Updated" date at top
+  - Add change to "Change Log" section
+- `apps/android/README.md` (if user-facing changes)
+
+---
+
+#### 3. iOS App (`apps/ios/`)
+
+**If you modify:**
+- App architecture or component structure
+- Audio monitoring service implementation
+- React Native bridge/native modules
+- iOS-specific audio APIs (AVFoundation)
+- Permission handling
+- UI components or screens
+- State management (Context/hooks)
+
+**Then you MUST update:**
+- `docs/tech-spec/ios.md`
+  - Update architecture diagrams
+  - Update native module specifications
+  - Update audio processing implementation
+  - Update permission requirements
+  - Increment "Last Updated" date at top
+  - Add change to "Change Log" section
+- `apps/ios/README.md` (if user-facing changes)
+
+---
+
+#### 4. macOS App (`apps/macos/`)
+
+**If you modify:**
+- SwiftUI view structure
+- AudioMonitor Swift implementation
+- AVFoundation audio processing
+- macOS-specific APIs
+- App permissions (microphone access)
+- UI/UX components
+
+**Then you MUST update:**
+- `docs/tech-spec/macos.md`
+  - Update architecture diagrams
+  - Update Swift API documentation
+  - Update audio processing implementation
+  - Update permission requirements
+  - Increment "Last Updated" date at top
+  - Add change to "Change Log" section
+- `apps/macos/README.md` (if user-facing changes)
+
+---
+
+#### 5. Windows App (`apps/windows/`)
+
+**If you modify:**
+- WPF/XAML UI structure
+- AudioMonitor C# implementation
+- NAudio or Windows audio APIs
+- MVVM architecture (ViewModels)
+- Windows-specific APIs
+- App permissions
+
+**Then you MUST update:**
+- `docs/tech-spec/windows.md`
+  - Update architecture diagrams
+  - Update C# API documentation
+  - Update audio processing implementation
+  - Update MVVM architecture details
+  - Increment "Last Updated" date at top
+  - Add change to "Change Log" section
+- `apps/windows/README.md` (if user-facing changes)
+
+---
+
+### Shared Package Changes
+
+**If you modify:**
+- `packages/core/` - Update `packages/core/README.md` and tech specs
+- `packages/audio-processing/` - Update `packages/audio-processing/README.md` and tech specs
+- `packages/notifications/` - Update `packages/notifications/README.md` and tech specs
+
+**Note:** Shared package changes may require updating multiple app tech specs if the change affects how apps use the package.
+
+---
+
+### General Documentation
+
+**If you modify:**
+- Overall monorepo structure
+- Build system or tooling
+- CI/CD pipeline
+- Development workflow
+
+**Then update:**
+- `docs/architecture.md` (overall architecture)
+- `docs/contributing.md` (contributor workflow)
+- Root `README.md` (project overview)
+
+---
+
+## Code Quality Standards
+
+### Chrome Extension Development
+
+1. **Always use TypeScript** - No plain JavaScript
+2. **Message handlers must return true** for async operations
+3. **Clean up resources** in component unmount/stop methods
+4. **Handle errors gracefully** - Show user-friendly messages
+5. **Add console.log for debugging** during development (remove in production)
+6. **Test cross-component communication** after message protocol changes
+7. **Verify permissions** in manifest.json match actual usage
+
+### Audio Processing
+
+1. **Always normalize volume** to 0.0-1.0 range
+2. **Use requestAnimationFrame** for processing loops
+3. **Clean up AudioContext** on stop to prevent memory leaks
+4. **Implement cooldowns** for user notifications
+5. **Use shared packages** for audio calculations
+
+### State Management
+
+1. **Persist user settings** to chrome.storage.local
+2. **Sync state** between components via messages
+3. **Restore state** on extension restart
+4. **Validate data** read from storage (use defaults if invalid)
+
+---
+
+## Architecture Rules
+
+### Chrome Extension Component Responsibilities
+
+**Never violate these separations:**
+
+1. **Popup** - UI only, no business logic
+   - ❌ Do not access microphone directly
+   - ❌ Do not perform audio processing
+   - ✅ Only send messages to background
+   - ✅ Display data received from background
+
+2. **Background Service Worker** - Orchestration only
+   - ❌ Do not access microphone
+   - ❌ Do not access DOM
+   - ✅ Route messages between components
+   - ✅ Manage offscreen document lifecycle
+   - ✅ Coordinate tab/content script operations
+
+3. **Offscreen Document** - Audio processing only
+   - ✅ Access microphone via getUserMedia
+   - ✅ Perform audio calculations
+   - ✅ Send results to background
+   - ❌ Do not manipulate tab DOM
+
+4. **Content Script** - Visual feedback only
+   - ✅ Create/manage overlay element
+   - ✅ Respond to show/hide messages
+   - ❌ Do not access microphone
+   - ❌ Do not perform business logic
+
+### Message Flow Patterns
+
+**Always follow these patterns:**
+
+```
+User Action (Popup)
+  → Message to Background
+  → Background orchestrates
+  → Messages to Offscreen/Content
+  → Response back through Background
+  → Update Popup UI
+```
+
+**Never allow:**
+- Popup ↔ Offscreen direct communication
+- Popup ↔ Content Script direct communication
+- Offscreen ↔ Content Script direct communication
+
+**Always go through Background Service Worker as the message router.**
+
+---
+
+## Testing Requirements
+
+### Before Committing Code
+
+1. **Build successfully** - `pnpm run build` must pass
+2. **Test in Chrome** - Load extension and verify functionality
+3. **Check service worker console** - No errors
+4. **Test background monitoring** - Works with popup closed
+5. **Test state persistence** - Survives extension reload
+6. **Test threshold changes** - Updates correctly
+7. **Verify no memory leaks** - Stop/start multiple times
+
+### Before Publishing
+
+1. Test on clean Chrome profile
+2. Test on different websites (Google Meet, Zoom, etc.)
+3. Verify all permissions are justified
+4. Check for console warnings/errors
+5. Test notification cooldown
+6. Verify warning count accuracy
+7. Test edge cases (rapid threshold crossings, tab switches)
+
+---
+
+## Common Pitfalls to Avoid
+
+### 1. Async Message Handlers
+```typescript
+// ❌ WRONG - Missing return true
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  handleAsync().then(sendResponse);
+  // Missing return true - response won't be sent!
+});
+
+// ✅ CORRECT
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  handleAsync().then(sendResponse);
+  return true; // Keeps message channel open
+});
+```
+
+### 2. Resource Cleanup
+```typescript
+// ❌ WRONG - Memory leak
+stopMonitoring() {
+  this.isMonitoring = false;
+  // Forgot to close AudioContext!
+}
+
+// ✅ CORRECT
+stopMonitoring() {
+  this.isMonitoring = false;
+  if (this.audioContext) {
+    this.audioContext.close();
+    this.audioContext = null;
+  }
+  if (this.stream) {
+    this.stream.getTracks().forEach(track => track.stop());
+  }
+}
+```
+
+### 3. Edge Detection
+```typescript
+// ❌ WRONG - Sends message every frame
+if (volume > threshold) {
+  sendTabColorChange(true); // Message spam!
+}
+
+// ✅ CORRECT - Only on state change
+if (volume > threshold && !wasOverThreshold) {
+  sendTabColorChange(true); // Only once on crossing
+  wasOverThreshold = true;
+}
+```
+
+### 4. Error Handling
+```typescript
+// ❌ WRONG - Silent failure
+async function startMonitoring() {
+  await setupOffscreen();
+  await sendMessage('START_MONITORING');
+}
+
+// ✅ CORRECT - User-friendly errors
+async function startMonitoring() {
+  try {
+    await setupOffscreen();
+    const response = await sendMessage('START_MONITORING');
+    if (!response.success) {
+      alert('Failed to start: ' + response.error);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Please check Chrome version is 109+ and grant microphone permission');
+  }
+}
+```
+
+---
+
+## Code Style Guidelines
+
+### TypeScript
+
+- Use explicit types for function parameters and returns
+- Avoid `any` type - use specific types or `unknown`
+- Use interfaces for data structures
+- Use enums for message types (consider adding)
+
+### Naming Conventions
+
+- **Functions:** camelCase (`startMonitoring`, `handleMessage`)
+- **Classes:** PascalCase (`AudioMonitor`, `ThresholdDetector`)
+- **Constants:** UPPER_SNAKE_CASE (`DEFAULT_THRESHOLD`, `WARNING_COOLDOWN`)
+- **Private methods:** prefix with underscore (`_processAudio`)
+- **Message types:** UPPER_SNAKE_CASE strings (`START_MONITORING`, `VOLUME_UPDATE`)
+
+### Comments
+
+- Add JSDoc comments for public API functions
+- Explain **why** not **what** in inline comments
+- Document edge cases and gotchas
+- Add TODO comments for future improvements
+
+### File Organization
+
+```
+Component files should follow this order:
+1. Imports
+2. Type definitions / Interfaces
+3. Constants
+4. Class definition (if applicable)
+5. Functions (public first, private last)
+6. Event listeners / initialization
+7. Exports
+```
+
+---
+
+## Git Workflow
+
+### Commit Message Format
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+**Types:**
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation update
+- `refactor`: Code restructuring
+- `test`: Testing changes
+- `chore`: Build/tooling changes
+
+**Examples:**
+```
+feat(chrome-ext): add background audio monitoring
+
+- Implement offscreen document for persistent monitoring
+- Add message protocol for background communication
+- Update popup to query monitoring state on open
+
+Closes #123
+
+---
+
+docs: update chrome extension tech spec
+
+- Add offscreen document architecture
+- Update message protocol documentation
+- Add troubleshooting section
+
+---
+
+fix(chrome-ext): prevent notification spam
+
+- Add cooldown period tracking
+- Only trigger on threshold crossing edge
+- Update lastWarningTime correctly
+
+Fixes #456
+```
+
+### Branch Naming
+
+- `feature/description` - New features
+- `fix/description` - Bug fixes  
+- `docs/description` - Documentation
+- `refactor/description` - Code restructuring
+
+---
+
+## Package Management
+
+### Shared Packages
+
+When modifying shared packages (`packages/*`):
+
+1. Update version in package.json (follow semver)
+2. Update package README.md
+3. Rebuild package: `pnpm run build`
+4. Rebuild dependent apps
+5. Test all apps that use the package
+
+### Dependencies
+
+- Use exact versions for critical dependencies
+- Use `^` for dev dependencies
+- Document reason for any unusual dependencies
+- Keep dependencies up to date (security)
+
+---
+
+## Performance Guidelines
+
+### Chrome Extension
+
+- **Message frequency:** Limit to ~60 Hz max (animation frame rate)
+- **Audio processing:** Should use <5% CPU
+- **Memory:** Should stay constant (no leaks)
+- **Startup time:** Extension should load in <500ms
+- **Message latency:** Should be <50ms end-to-end
+
+### Optimization Tips
+
+1. **Batch updates** - Don't send message for every sample
+2. **Use requestAnimationFrame** - Syncs with browser rendering
+3. **Cleanup resources** - Prevent memory leaks
+4. **Minimize DOM operations** - Cache elements
+5. **Use efficient data structures** - Float32Array for audio
+
+---
+
+## Security Checklist
+
+Before any release:
+
+- [ ] No hardcoded credentials or API keys
+- [ ] No console.log with sensitive data
+- [ ] Minimal permissions in manifest.json
+- [ ] No eval() or Function() usage
+- [ ] CSP compliant (no inline scripts)
+- [ ] Input validation on all user inputs
+- [ ] Proper error messages (no stack traces to users)
+- [ ] No network requests (currently)
+- [ ] Audio data not persisted or transmitted
+
+---
+
+## Documentation Best Practices
+
+### Writing Good Tech Specs
+
+1. **Be Comprehensive** - Include all 12 required sections
+2. **Use Diagrams** - ASCII art diagrams for architecture and data flow
+3. **Provide Examples** - Code snippets for API usage
+4. **Document "Why"** - Explain architectural decisions
+5. **Include Troubleshooting** - Common issues and solutions
+6. **Keep it Current** - Update with every architectural change
+
+### Diagrams to Include
+
+- **Architecture Diagram** - Component structure and relationships
+- **Data Flow Diagram** - How data moves through the system
+- **Message Flow** - Inter-component communication (if applicable)
+- **State Management** - State structure and updates
+- **Permission Flow** - How permissions are requested and handled
+
+### Code Examples to Include
+
+- **API Function Signatures** - With parameters and return types
+- **Usage Examples** - How to use key APIs
+- **Common Patterns** - Established patterns in the codebase
+- **Anti-Patterns** - What NOT to do
+
+---
+
+## When in Doubt
+
+1. **Check the app's tech spec** - See quick reference table at the top
+   - Chrome Extension: `docs/tech-spec/chrome-extension.md` ✅ Complete
+   - Android: `docs/tech-spec/android.md` 🚧 Fill as you build
+   - iOS: `docs/tech-spec/ios.md` 🚧 Fill as you build
+   - macOS: `docs/tech-spec/macos.md` 🚧 Fill as you build
+   - Windows: `docs/tech-spec/windows.md` 🚧 Fill as you build
+2. **Follow existing patterns** - Look at similar code in the same app
+3. **Reference chrome-extension.md** - Use as template for incomplete specs
+4. **Test thoroughly** - Better safe than sorry
+5. **Document changes** - Update app tech spec immediately
+6. **Ask for review** - Complex changes need review
+
+---
+
+## Remember
+
+> "Good documentation is as important as good code. Update both together."
+
+**Every architectural change = Documentation update**
+
+This ensures the project remains maintainable and new developers can onboard quickly.

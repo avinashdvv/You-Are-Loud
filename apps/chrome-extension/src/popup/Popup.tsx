@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { AudioMonitor } from '../services/AudioMonitor';
 import './Popup.css';
 
 export default function Popup() {
@@ -7,50 +6,90 @@ export default function Popup() {
   const [isMonitoring, setIsMonitoring] = useState(false);
   const [threshold, setThreshold] = useState(0.7);
   const [warningCount, setWarningCount] = useState(0);
-  const [audioMonitor] = useState(() => new AudioMonitor(threshold));
 
   useEffect(() => {
-    // Load saved settings
-    chrome.storage.local.get(['threshold', 'warningCount'], (result) => {
-      if (result.threshold) {
+    // Load saved settings and status
+    chrome.storage.local.get(['threshold', 'warningCount', 'isMonitoring'], (result) => {
+      if (result.threshold !== undefined) {
         setThreshold(result.threshold);
-        audioMonitor.setThreshold(result.threshold);
       }
       if (result.warningCount !== undefined) {
         setWarningCount(result.warningCount);
       }
+      if (result.isMonitoring !== undefined) {
+        setIsMonitoring(result.isMonitoring);
+      }
     });
 
-    return () => {
-      if (isMonitoring) {
-        audioMonitor.stopMonitoring();
+    // Get current status from background
+    chrome.runtime.sendMessage({ type: 'GET_STATUS' }, (response) => {
+      if (response) {
+        setIsMonitoring(response.isMonitoring);
+        setCurrentVolume(response.currentVolume || 0);
       }
+    });
+
+    // Listen for volume updates from background
+    const messageListener = (request: any) => {
+      if (request.type === 'VOLUME_BROADCAST') {
+        setCurrentVolume(request.volume);
+      }
+    };
+    chrome.runtime.onMessage.addListener(messageListener);
+
+    // Listen for storage changes (warning count updates)
+    const storageListener = (changes: any) => {
+      if (changes.warningCount) {
+        setWarningCount(changes.warningCount.newValue);
+      }
+    };
+    chrome.storage.onChanged.addListener(storageListener);
+
+    return () => {
+      chrome.runtime.onMessage.removeListener(messageListener);
+      chrome.storage.onChanged.removeListener(storageListener);
     };
   }, []);
 
   const startMonitoring = async () => {
     try {
-      await audioMonitor.startMonitoring((volume) => {
-        setCurrentVolume(volume);
-      });
-      setIsMonitoring(true);
+      console.log('Requesting to start monitoring...');
+      const response = await chrome.runtime.sendMessage({ type: 'START_MONITORING' });
+      console.log('Response from background:', response);
+      
+      if (response && response.success) {
+        setIsMonitoring(true);
+        console.log('Monitoring started successfully');
+      } else {
+        const errorMsg = response?.error || 'Unknown error';
+        console.error('Failed to start monitoring:', errorMsg);
+        alert('Failed to start monitoring:\n\n' + errorMsg + '\n\nCheck the extension service worker console for details.');
+      }
     } catch (error) {
-      console.error('Failed to start monitoring:', error);
-      alert('Microphone access denied. Please grant permission.');
+      console.error('Error starting monitoring:', error);
+      alert('Error: ' + (error as Error).message + '\n\nMake sure:\n1. Chrome is version 109+\n2. Microphone permission is granted\n3. Check service worker console for errors');
     }
   };
 
-  const stopMonitoring = () => {
-    audioMonitor.stopMonitoring();
-    setIsMonitoring(false);
-    setCurrentVolume(0);
+  const stopMonitoring = async () => {
+    try {
+      const response = await chrome.runtime.sendMessage({ type: 'STOP_MONITORING' });
+      if (response.success) {
+        setIsMonitoring(false);
+        setCurrentVolume(0);
+      }
+    } catch (error) {
+      console.error('Failed to stop monitoring:', error);
+    }
   };
 
   const handleThresholdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newThreshold = parseFloat(e.target.value);
     setThreshold(newThreshold);
-    audioMonitor.setThreshold(newThreshold);
-    chrome.storage.local.set({ threshold: newThreshold });
+    chrome.runtime.sendMessage({ 
+      type: 'SET_THRESHOLD', 
+      threshold: newThreshold 
+    });
   };
 
   const resetCount = () => {

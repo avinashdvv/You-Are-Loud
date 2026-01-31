@@ -5,7 +5,15 @@
   "description": "Voice monitoring for video calls - alerts you when speaking too loud",
   "permissions": [
     "storage",
-    "notifications"
+    "notifications",
+    "activeTab",
+    "scripting",
+    "tabs",
+    "offscreen"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
   ],
   "action": {
     "default_popup": "popup.html",
