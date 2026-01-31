@@ -1,7 +1,7 @@
 # Marketing Templates
 ## Your Are Loud - Ready-to-Use Marketing Assets
 
-This folder will contain ready-to-use templates for marketing activities. Templates are referenced in the [Marketing Guidelines](../MARKETING_GUIDELINES.md).
+This folder will contain ready-to-use templates for marketing activities. Templates are referenced in the [Marketing Guidelines](../guidelines.md).
 
 ---
 
@@ -61,9 +61,9 @@ This folder will contain ready-to-use templates for marketing activities. Templa
 ## 🎨 Brand Guidelines Reference
 
 When using templates, always refer to:
-- **Colors:** See [Marketing Guidelines - Visual Identity](../MARKETING_GUIDELINES.md#visual-identity)
-- **Voice:** See [Marketing Guidelines - Brand Voice](../MARKETING_GUIDELINES.md#brand-identity)
-- **Messaging:** See [Marketing Guidelines - Core Messaging](../MARKETING_GUIDELINES.md#core-messaging)
+- **Colors:** See [Marketing Guidelines - Visual Identity](../guidelines.md#visual-identity)
+- **Voice:** See [Marketing Guidelines - Brand Voice](../guidelines.md#brand-identity)
+- **Messaging:** See [Marketing Guidelines - Core Messaging](../guidelines.md#core-messaging)
 
 ---
 
@@ -81,8 +81,8 @@ Have a template that worked well? Contribute it!
 
 ## 📚 Related Documentation
 
-- [Complete Marketing Guidelines](../MARKETING_GUIDELINES.md)
-- [Marketing Quick Start](../MARKETING_QUICK_START.md)
+- [Complete Marketing Guidelines](../guidelines.md)
+- [Marketing Quick Start](../quick-start.md)
 - [Product Specs](../product-spec/README.md)
 
 ---

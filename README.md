@@ -47,9 +47,9 @@ your-are-loud/
 │   ├── architecture.md        # System architecture
 │   ├── monorepo-structure.md  # Detailed structure guide
 │   ├── contributing.md        # Contribution guidelines
-│   ├── MARKETING_GUIDELINES.md # Marketing strategy & brand guidelines
 │   ├── product-spec/          # Product requirements (non-technical)
-│   └── tech-spec/             # Platform technical specs
+│   ├── tech-spec/             # Platform technical specs (for developers)
+│   └── marketing/             # Marketing strategy & execution (for growth)
 │
 ├── scripts/                   # Build & utility scripts
 │   ├── setup.sh              # Initial setup
@@ -164,10 +164,15 @@ See platform documentation for detailed setup:
 
 **Want to help market or sponsor?**
 
-| Document | What You'll Learn |
-|----------|-------------------|
-| 📣 **[Marketing Guidelines](docs/MARKETING_GUIDELINES.md)** | Complete marketing strategy, brand guidelines, and sponsorship info |
-| ⚡ **[Marketing Quick Start](docs/MARKETING_QUICK_START.md)** | Essential marketing info in 5 minutes |
+**→ [Marketing Documentation Index](docs/marketing/README.md)** - Start here for all marketing docs
+
+| Document | What You'll Learn | Read Time |
+|----------|-------------------|-----------|
+| 📚 **[Marketing Overview](docs/marketing/overview.md)** | How all marketing docs fit together | 15 min |
+| 📋 **[Quick Reference](docs/marketing/quick-reference.md)** | One-page cheat sheet (print & keep handy!) | 3 min |
+| ⚡ **[Quick Start](docs/marketing/quick-start.md)** | Essential marketing info in 5 minutes | 5 min |
+| 🚀 **[Execution Plan](docs/marketing/execution-plan.md)** | 90-day step-by-step zero-cost marketing plan | 1 hour |
+| 📣 **[Guidelines](docs/marketing/guidelines.md)** | Complete strategy, brand guidelines, and sponsorship | 3 hours |
 
 ### For Developers (Technical Specs)
 

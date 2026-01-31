@@ -14,7 +14,15 @@ docs/
 ├── contributing.md                # Contribution guidelines
 ├── implementation-summary.md      # Implementation details and status
 ├── refactoring-summary.md         # Mobile app refactoring details
-├── MARKETING_GUIDELINES.md        # Comprehensive marketing strategy & brand guidelines
+│
+├── marketing/                     # Marketing strategy & execution (for growth/sponsors)
+│   ├── README.md                  # Marketing documentation index
+│   ├── overview.md                # Marketing suite overview (start here)
+│   ├── quick-reference.md         # One-page cheat sheet (print this!)
+│   ├── quick-start.md             # 5-minute marketing primer
+│   ├── execution-plan.md          # 90-day step-by-step plan (zero-cost)
+│   ├── guidelines.md              # Complete strategy & brand guidelines
+│   └── templates/                 # Ready-to-use content templates
 │
 ├── product-spec/                  # Product Requirements Documents (non-technical)
 │   ├── README.md                  # PRD overview and comparison
@@ -69,7 +77,17 @@ docs/
 | [macOS App PRD](./product-spec/macos-prd.md) | Mac app product spec | Mac users, potential sponsors |
 | [Mobile App PRD](./product-spec/mobile-prd.md) | iOS & Android product spec | Mobile users, potential sponsors |
 | [Windows App PRD](./product-spec/windows-prd.md) | Windows app product spec | Windows users, potential sponsors |
-| [Marketing Guidelines](./MARKETING_GUIDELINES.md) | Complete marketing strategy and brand guidelines | Marketers, sponsors, contributors |
+
+### Marketing Strategy (For Growth & Promotion)
+
+| Document | Description | Audience |
+|----------|-------------|----------|
+| [Marketing Overview](./marketing/README.md) | Marketing documentation index (start here) | Everyone |
+| [Marketing Suite Overview](./marketing/overview.md) | How all marketing docs fit together | First-time readers |
+| [Quick Reference](./marketing/quick-reference.md) | One-page cheat sheet (print this!) | Daily use |
+| [Quick Start](./marketing/quick-start.md) | 5-minute marketing primer | Getting started |
+| [Execution Plan](./marketing/execution-plan.md) | 90-day step-by-step plan (zero-cost) | Solo founders, executors |
+| [Guidelines](./marketing/guidelines.md) | Complete strategy & brand guidelines | Marketers, contributors |
 
 ### For Developers (Technical)
 
@@ -158,20 +176,22 @@ docs/
 
 **💰 Potential Sponsor**
 - Start: [PRD Overview](./product-spec/README.md)
-- Read: [Marketing Guidelines](./MARKETING_GUIDELINES.md) → "Sponsorship Marketing"
+- Read: [Marketing Guidelines](./marketing/guidelines.md) → "Sponsorship Marketing"
 - See: What your sponsorship enables
 - Focus: Project values, sustainability, impact
 
 **📝 Blogger/Media**
 - Start: [PRD Overview](./product-spec/README.md)
-- Read: [Marketing Guidelines](./MARKETING_GUIDELINES.md) → "PR & Media Relations"
+- Read: [Marketing Guidelines](./marketing/guidelines.md) → "PR & Media Relations"
 - Pick: Platform PRDs for accurate info
 - Focus: Unique value proposition, privacy-first approach, open source model
 
 **📣 Marketing/Growth Contributor**
-- Start: [Marketing Guidelines](./MARKETING_GUIDELINES.md)
-- Read: [PRD Overview](./product-spec/README.md) for product understanding
-- Focus: Brand identity, messaging, channels, content strategy
+- Start: [Marketing Overview](./marketing/README.md) - Start here!
+- Read: [Execution Plan](./marketing/execution-plan.md) - Week-by-week action plan
+- Print: [Quick Reference](./marketing/quick-reference.md) - Daily guide
+- Study: [Guidelines](./marketing/guidelines.md) - Overall strategy
+- Understand: [PRD Overview](./product-spec/README.md) for product knowledge
 
 ### By Developer Role
 
@@ -226,11 +246,14 @@ docs/
 | **Testing changes** | Platform tech spec → "Testing Strategy" |
 | **Understanding recent changes** | [Refactoring Summary](./refactoring-summary.md) |
 | **Contributing code** | [Contributing Guide](./contributing.md) |
-| **Marketing the project** | [Marketing Guidelines](./MARKETING_GUIDELINES.md) |
-| **Writing marketing content** | [Marketing Guidelines](./MARKETING_GUIDELINES.md) → "Content Strategy" |
-| **Launching on new platform** | [Marketing Guidelines](./MARKETING_GUIDELINES.md) → "Platform-Specific Marketing" |
-| **Seeking sponsorships** | [Marketing Guidelines](./MARKETING_GUIDELINES.md) → "Sponsorship Marketing" |
-| **PR and media outreach** | [Marketing Guidelines](./MARKETING_GUIDELINES.md) → "PR & Media Relations" |
+| **Marketing the project** | [Marketing Overview](./marketing/README.md) (start here) |
+| **Day-by-day marketing tasks** | [Execution Plan](./marketing/execution-plan.md) → Week-by-week plan |
+| **Writing marketing content** | [Guidelines](./marketing/guidelines.md) → "Content Strategy" |
+| **Launching on new platform** | [Execution Plan](./marketing/execution-plan.md) → Week 2-4 |
+| **Seeking sponsorships** | [Execution Plan](./marketing/execution-plan.md) → Week 11 |
+| **PR and media outreach** | [Guidelines](./marketing/guidelines.md) → "PR & Media Relations" |
+| **Zero-cost growth tactics** | [Execution Plan](./marketing/execution-plan.md) |
+| **Daily marketing routine** | [Quick Reference](./marketing/quick-reference.md) (print this!) |
 
 ## 🎓 Learning Paths
 
@@ -379,7 +402,17 @@ Found an error? Have a suggestion?
 | macOS App PRD | ✅ Complete | Jan 2026 |
 | Mobile App PRD | ✅ Complete | Jan 2026 |
 | Windows App PRD | ✅ Complete | Jan 2026 |
-| Marketing Guidelines | ✅ Complete | Jan 2026 |
+
+### Marketing Documentation
+
+| Document | Status | Last Major Update |
+|----------|--------|-------------------|
+| Marketing Overview | ✅ Complete | Jan 2026 |
+| Marketing Suite Overview | ✅ Complete | Jan 2026 |
+| Quick Reference | ✅ Complete | Jan 2026 |
+| Quick Start | ✅ Complete | Jan 2026 |
+| Execution Plan | ✅ Complete | Jan 2026 |
+| Guidelines | ✅ Complete | Jan 2026 |
 
 ### Technical Documentation (For Developers)
 
@@ -404,7 +437,14 @@ Found an error? Have a suggestion?
 - 📋 [PRD Overview](./product-spec/README.md) - Start here if you're not a developer
 - 💰 [Sponsorship Info](./product-spec/README.md#open-source--sponsorship-model) - How to support the project
 - 🔒 [Privacy](./product-spec/README.md) - Our privacy-first commitment
-- 📣 [Marketing Guidelines](./MARKETING_GUIDELINES.md) - Complete marketing strategy
+
+**Marketing:**
+- 🚀 [Marketing Overview](./marketing/README.md) - Start here for all marketing docs
+- 📋 [Quick Reference](./marketing/quick-reference.md) - One-page cheat sheet (print!)
+- ⚡ [Quick Start](./marketing/quick-start.md) - 5-minute marketing primer
+- 📅 [Execution Plan](./marketing/execution-plan.md) - 90-day action plan (zero-cost)
+- 📣 [Guidelines](./marketing/guidelines.md) - Complete strategy & brand
+- 📋 [Marketing Quick Reference](./marketing/quick-reference.md) - One-page cheat sheet
 
 **Technical:**
 - 🚀 [Quick Start](./quick-start.md) - Get started in 5 minutes

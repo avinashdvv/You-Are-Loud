@@ -2,7 +2,7 @@
 ## Your Are Loud - Essential Marketing Information
 
 **For:** Quick reference and new marketing contributors  
-**Full Guide:** [Complete Marketing Guidelines](./MARKETING_GUIDELINES.md)  
+**Full Guide:** [Complete Marketing Guidelines](./guidelines.md)  
 **Last Updated:** January 31, 2026
 
 ---
@@ -233,8 +233,8 @@ Thanks!
 ## 🔗 Essential Links
 
 **Full Documentation:**
-- 📖 [Complete Marketing Guidelines](./MARKETING_GUIDELINES.md) - In-depth strategy
-- 📋 [Product Specs](./product-spec/README.md) - What we're marketing
+- 📖 [Complete Marketing Guidelines](./guidelines.md) - In-depth strategy
+- 📋 [Product Specs](../product-spec/README.md) - What we're marketing
 - 🚀 [Quick Start](./quick-start.md) - Try the product
 
 **Marketing Assets:**
@@ -280,7 +280,7 @@ Thanks!
 - **GitHub Issues:** Marketing asset requests
 - **Direct Contact:** [project email]
 
-**Need more detail?** See the [Complete Marketing Guidelines](./MARKETING_GUIDELINES.md) (20,000+ words covering everything in depth).
+**Need more detail?** See the [Complete Marketing Guidelines](./guidelines.md) (20,000+ words covering everything in depth).
 
 ---
 
@@ -288,4 +288,4 @@ Thanks!
 
 **Last Updated:** January 31, 2026  
 **Document:** Marketing Quick Start Guide  
-**Related:** [Full Marketing Guidelines](./MARKETING_GUIDELINES.md)
+**Related:** [Full Marketing Guidelines](./guidelines.md)

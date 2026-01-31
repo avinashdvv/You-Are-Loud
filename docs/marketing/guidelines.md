@@ -1706,7 +1706,7 @@ Use tools that respect user privacy:
 
 ### Template Library
 
-**Located in:** `/docs/marketing-templates/`
+**Located in:** `/docs/marketing/templates/`
 
 - Email outreach templates
 - Social media post templates
