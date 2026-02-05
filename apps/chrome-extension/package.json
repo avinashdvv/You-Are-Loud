@@ -8,11 +8,12 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@your-are-loud/core": "workspace:*",
     "@your-are-loud/audio-processing": "workspace:*",
+    "@your-are-loud/core": "workspace:*",
     "@your-are-loud/notifications": "workspace:*",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "recharts": "^3.7.0"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.260",

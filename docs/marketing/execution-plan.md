@@ -110,7 +110,7 @@ This is your **step-by-step playbook** for launching and growing "You're Loud" u
 ✅ **Create reusable content:**
 1. **Screenshot pack** (for sharing):
    - Extension popup with volume meter
-   - Red overlay in action
+   - Volume graph in action showing real-time monitoring
    - Settings panel
    - Chrome Web Store listing
 
@@ -1331,7 +1331,7 @@ Privacy-first voice volume monitor. Get alerted when you're speaking too loudly 
 1. Hero shot: Extension in action
 2. Problem statement graphic
 3. Volume meter close-up
-4. Red overlay demo
+4. Volume graph demo with 10-minute history
 5. Settings panel
 6. Privacy commitment
 7. User testimonial

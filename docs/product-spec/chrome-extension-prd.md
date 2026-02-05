@@ -2,7 +2,7 @@
 ## "You're Loud" - Voice Volume Monitor for Video Calls
 
 **Version:** 1.0  
-**Last Updated:** January 31, 2026  
+**Last Updated:** February 5, 2026  
 **Project Type:** Open Source (Sponsor-Supported)  
 **Status:** Available for Use  
 
@@ -25,10 +25,10 @@ Working from home has become permanent for many people. But without the natural 
 ### The Solution
 A simple, privacy-first Chrome extension that:
 1. Monitors your microphone in real-time
-2. Shows you a visual volume meter
-3. Flashes your screen red when you exceed your chosen threshold
-4. Sends a browser notification to bring awareness
-5. Tracks how many times you've been loud (for self-improvement)
+2. Shows you a real-time volume graph with 10-minute history
+3. Sends a browser notification after 1 minute of continuous loud speaking
+4. Tracks how many times you've been loud (for self-improvement)
+5. Provides visual feedback through an interactive volume chart
 
 ### Why This Matters
 - **For Remote Workers:** Better audio etiquette and household peace
@@ -79,18 +79,18 @@ A simple, privacy-first Chrome extension that:
 
 **Acceptance Criteria:**
 - Extension monitors my voice in real-time during calls
-- I get immediate feedback when I exceed my comfort threshold
+- I get notified after 1 minute of continuous loud speaking (not immediately, reducing false alarms)
 - I can adjust the sensitivity based on my home environment
-- I can see patterns in when I tend to speak louder
+- I can see patterns in when I tend to speak louder through the volume history graph
 
 ### As a Meeting Participant...
 > "I want to maintain professional audio quality so my colleagues have a pleasant listening experience."
 
 **Acceptance Criteria:**
-- I'm alerted before my voice causes audio distortion
+- I'm alerted after 1 minute of continuous loud speaking (prevents false alarms from brief spikes)
 - The alert is noticeable but not disruptive to my flow
 - I can quickly adjust my volume and continue speaking
-- The tool helps me build long-term awareness
+- The tool helps me build long-term awareness through volume history visualization
 
 ### As a Privacy-Conscious User...
 > "I want volume monitoring that doesn't record or store my voice data."
@@ -105,7 +105,7 @@ A simple, privacy-first Chrome extension that:
 > "I want to be aware when my voice might wake up my napping baby in the next room."
 
 **Acceptance Criteria:**
-- Visual feedback (red screen) I can see at a glance
+- Visual feedback through real-time volume graph I can see at a glance
 - Customizable threshold for my specific volume needs
 - Works across all video calling platforms (Zoom, Meet, Teams)
 - Minimal setup required - just install and go
@@ -126,15 +126,16 @@ A simple, privacy-first Chrome extension that:
 ### First-Time Use
 1. User clicks extension icon
 2. Sees simple popup with:
-   - Large volume meter (currently silent)
-   - Threshold slider (default 70%)
+   - Real-time volume graph showing 10-minute history (currently empty)
+   - Current volume percentage display
+   - Threshold slider (default 70%) with visual reference line on graph
    - Big "Start Monitoring" button
    - Simple explanation text
 3. Clicks "Start Monitoring"
 4. Microphone access prompt appears (if not already granted)
-5. Volume meter starts responding to voice
-6. User can test by speaking at different volumes
-7. User adjusts threshold to their preference
+5. Volume graph starts displaying real-time data
+6. User can test by speaking at different volumes and see the graph update
+7. User adjusts threshold to their preference (threshold line moves on graph)
 
 **Key Design Principle:** Zero learning curve. Should be immediately obvious what it does and how to use it.
 
@@ -144,11 +145,13 @@ A simple, privacy-first Chrome extension that:
 3. Clicks "Start Monitoring" (or it auto-starts if enabled)
 4. Popup can be closed - monitoring continues in background
 5. User proceeds with their call normally
-6. If voice gets too loud:
-   - Screen flashes red overlay for 3 seconds
-   - Browser notification appears
+6. If voice gets too loud for 1 minute continuously:
+   - Browser notification appears: "You have been speaking too loud for 1 minute. Please lower your voice."
+   - Notification requires user interaction to dismiss
    - User adjusts their volume
-7. After call, user clicks "Stop Monitoring"
+   - Timer resets if volume drops below threshold
+7. User can check volume history graph anytime by opening popup
+8. After call, user clicks "Stop Monitoring"
 
 **Frequency of interaction:** 
 - Opening extension: 1-2 times per call
@@ -157,33 +160,39 @@ A simple, privacy-first Chrome extension that:
 
 ### Visual Feedback System
 
-**Volume Meter Colors:**
-- 🟢 **Green (0-80% of threshold):** "You're good"
-- 🟡 **Yellow (80-100% of threshold):** "Getting close"
-- 🔴 **Red (Over threshold):** "Too loud!"
-
-**Red Screen Overlay:**
-- Full-screen semi-transparent red flash
-- Appears on your current tab
-- Automatically fades after 3 seconds
-- Non-intrusive (doesn't block clicks)
-- Visible in peripheral vision during calls
+**Volume Graph:**
+- Real-time line chart showing volume over time (10-minute history)
+- Blue gradient fill under the volume line for easy visualization
+- Red dashed reference line showing threshold level
+- Interactive tooltips showing exact volume values on hover
+- Color-coded current volume indicator:
+  - 🟢 **Green (0-80% of threshold):** "You're good"
+  - 🟡 **Yellow (80-100% of threshold):** "Getting close"
+  - 🔴 **Red (Over threshold):** "Too loud!"
+- X-axis shows time labels
+- Y-axis shows volume percentage (0-100%)
 
 **Browser Notification:**
-- Title: "🔊 You're Speaking Too Loudly"
-- Body: Brief reminder message
-- Appears once every 3 seconds maximum (prevents spam)
+- Title: "🔊 You're Too Loud!"
+- Body: "You have been speaking too loud for 1 minute. Please lower your voice."
+- Appears after 1 minute of continuous loud speaking
+- Requires user interaction to dismiss (stays visible until dismissed)
+- 60-second cooldown after each notification (prevents spam)
 
 ---
 
 ## ⚙️ Core Features
 
-### 1. Real-Time Volume Monitoring
-**What it does:** Continuously analyzes your microphone input and displays current volume level.
+### 1. Real-Time Volume Monitoring with History Graph
+**What it does:** Continuously analyzes your microphone input and displays current volume level in a real-time graph showing 10 minutes of history.
 
-**User benefit:** Immediate awareness of how loud you are at any given moment.
+**User benefit:** 
+- Immediate awareness of how loud you are at any given moment
+- See patterns and trends in your speaking volume over time
+- Visual reference to understand when you tend to speak louder
+- Interactive chart with tooltips for detailed information
 
-**Technical note for users:** Uses your existing microphone - no special hardware needed.
+**Technical note for users:** Uses your existing microphone - no special hardware needed. Graph built with Recharts library for professional visualization.
 
 ### 2. Customizable Threshold
 **What it does:** Adjustable sensitivity slider (30% - 100% of maximum volume).
@@ -202,21 +211,25 @@ A simple, privacy-first Chrome extension that:
 
 **Why this matters:** Doesn't require keeping extension popup open, which would be annoying.
 
-### 4. Visual Warning System
-**What it does:** Red screen flash when threshold exceeded.
+### 4. Smart Notification System
+**What it does:** Sends browser notification after 1 minute of continuous loud speaking (not immediately on threshold breach).
 
 **User benefit:** 
-- Impossible to miss, even in peripheral vision
-- Works alongside video calls without disruption
-- Visual cue that works even if notifications are silenced
+- Reduces false alarms from brief volume spikes
+- Only alerts for sustained loud speaking
+- Notification stays visible until dismissed
+- Works even if you're in a different tab
+- 60-second cooldown prevents notification spam
 
-### 5. Browser Notifications
-**What it does:** Standard Chrome notification when too loud.
+### 5. Volume History Visualization
+**What it does:** Professional real-time graph showing your speaking volume over the last 10 minutes.
 
 **User benefit:**
-- Works even if you're in a different tab
-- Shows in notification center for review later
-- Pairs with visual feedback for double reinforcement
+- See your volume patterns at a glance
+- Understand when you tend to speak louder
+- Visual feedback through interactive chart
+- Threshold reference line shows your limit
+- Tooltips provide exact values on hover
 
 ### 6. Warning Counter
 **What it does:** Tracks how many times you've been alerted.
@@ -275,10 +288,10 @@ To set clear expectations, this extension does NOT:
 
 ### Version 1.0 (Current) ✅
 - Real-time volume monitoring
-- Visual volume meter
-- Red screen overlay warnings
-- Browser notifications
-- Customizable threshold
+- Real-time volume graph with 10-minute history (Recharts)
+- Smart notification system (1-minute continuous loudness trigger)
+- Browser notifications with interaction requirement
+- Customizable threshold with visual reference line
 - Warning counter
 - Background monitoring
 - State persistence
@@ -292,7 +305,7 @@ To set clear expectations, this extension does NOT:
 - [ ] Multi-language support
 
 **Version 1.2 - Analytics**
-- [ ] Volume history graph (see patterns over time)
+- [x] Volume history graph (see patterns over time) ✅ Implemented in v1.0
 - [ ] Export statistics to CSV
 - [ ] Weekly summary reports
 - [ ] Per-site threshold settings (different for Zoom vs. Meet)
@@ -374,7 +387,7 @@ This is a **passion project** by a single developer with a full-time job. Sponso
 - Microphone: To analyze your voice volume
 - Notifications: To alert you when loud
 - Storage: To save your threshold preference
-- Active Tab: To show red overlay
+- Offscreen: To maintain persistent audio monitoring
 - All URLs: To work on any video call site
 
 **Why we need these:**
@@ -590,6 +603,6 @@ This codebase serves as a real-world example of:
 
 ---
 
-*Last updated: January 31, 2026*  
+*Last updated: February 5, 2026*  
 *Questions? Open a GitHub Discussion.*  
 *Want to sponsor? Check our GitHub Sponsors page.*

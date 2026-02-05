@@ -2,6 +2,7 @@
 import { calculateRMS, normalizeVolume } from '@your-are-loud/audio-processing';
 import { ThresholdDetector, DEFAULT_VOLUME_THRESHOLD } from '@your-are-loud/core';
 
+const AUDIO_MONITORING_INTERVAL = 100; // 60 * 1000
 class OffscreenAudioMonitor {
   private audioContext: AudioContext | null = null;
   private analyserNode: AnalyserNode | null = null;
@@ -10,9 +11,9 @@ class OffscreenAudioMonitor {
   private isMonitoring = false;
   private animationFrame: number | null = null;
   private thresholdDetector: ThresholdDetector;
-  private lastWarningTime: number = 0;
-  private warningCooldown = 3000; // 3 seconds
-  private wasOverThreshold = false;
+  private overThresholdStartTime: number | null = null;
+  private loudDurationThreshold = AUDIO_MONITORING_INTERVAL; // 1 minute in milliseconds
+  private hasNotifiedForCurrentPeriod = false;
 
   constructor() {
     this.thresholdDetector = new ThresholdDetector(DEFAULT_VOLUME_THRESHOLD);
@@ -69,9 +70,9 @@ class OffscreenAudioMonitor {
       this.audioContext = null;
     }
 
-    // Clear tab color overlay when stopping
-    this.sendTabColorChange(false);
-    this.wasOverThreshold = false;
+    // Reset tracking variables
+    this.overThresholdStartTime = null;
+    this.hasNotifiedForCurrentPeriod = false;
   }
 
   private processAudio(): void {
@@ -97,18 +98,35 @@ class OffscreenAudioMonitor {
 
       // Check threshold
       const isOverThreshold = this.thresholdDetector.exceedsThreshold(normalizedVolume);
+      const now = Date.now();
 
       if (isOverThreshold) {
-        if (!this.wasOverThreshold) {
-          // Just crossed threshold, show red immediately
-          this.sendTabColorChange(true);
+        // User is currently too loud
+        if (this.overThresholdStartTime === null) {
+          // Just started being too loud, record the start time
+          this.overThresholdStartTime = now;
+          this.hasNotifiedForCurrentPeriod = false;
+          console.log('User started being too loud');
+        } else {
+          // Check if user has been loud for 1 minute
+          const loudDuration = now - this.overThresholdStartTime;
+          
+          if (loudDuration >= this.loudDurationThreshold && !this.hasNotifiedForCurrentPeriod) {
+            // User has been loud for 1 minute continuously
+            console.log('User has been too loud for 1 minute, sending notification');
+            this.showNotification();
+            this.hasNotifiedForCurrentPeriod = true;
+          }
         }
-        this.checkAndShowWarning();
-        this.wasOverThreshold = true;
-      } else if (this.wasOverThreshold) {
-        // Volume dropped below threshold, hide red
-        this.sendTabColorChange(false);
-        this.wasOverThreshold = false;
+      } else {
+        // Volume is below threshold
+        if (this.overThresholdStartTime !== null) {
+          // User stopped being loud, reset timer
+          const loudDuration = now - this.overThresholdStartTime;
+          console.log(`User stopped being loud after ${Math.round(loudDuration / 1000)} seconds`);
+          this.overThresholdStartTime = null;
+          this.hasNotifiedForCurrentPeriod = false;
+        }
       }
 
       // Continue processing
@@ -116,17 +134,6 @@ class OffscreenAudioMonitor {
     };
 
     analyze();
-  }
-
-  private checkAndShowWarning(): void {
-    const now = Date.now();
-
-    if (now - this.lastWarningTime < this.warningCooldown) {
-      return;
-    }
-
-    this.lastWarningTime = now;
-    this.showNotification();
   }
 
   private showNotification(): void {
@@ -141,15 +148,6 @@ class OffscreenAudioMonitor {
     chrome.runtime.sendMessage({
       type: 'VOLUME_UPDATE',
       volume: volume
-    }).catch(() => {
-      // Ignore errors if background script is not ready
-    });
-  }
-
-  private sendTabColorChange(showRed: boolean): void {
-    // Send message to background to change tab color
-    chrome.runtime.sendMessage({
-      type: showRed ? 'SHOW_TAB_RED' : 'HIDE_TAB_RED'
     }).catch(() => {
       // Ignore errors if background script is not ready
     });

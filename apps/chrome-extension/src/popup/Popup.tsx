@@ -1,11 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ReferenceLine, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
 import './Popup.css';
+
+interface VolumeDataPoint {
+  volume: number;
+  timestamp: number;
+}
 
 export default function Popup() {
   const [currentVolume, setCurrentVolume] = useState(0);
   const [isMonitoring, setIsMonitoring] = useState(false);
   const [threshold, setThreshold] = useState(0.7);
   const [warningCount, setWarningCount] = useState(0);
+  const [volumeHistory, setVolumeHistory] = useState<VolumeDataPoint[]>([]);
+  const historyDuration = 600000; // Keep 10 minutes of history (10 * 60 * 1000)
+
+  // Transform volume history for Recharts
+  const chartData = useMemo(() => {
+    if (volumeHistory.length === 0) return [];
+    
+    const now = Date.now();
+    return volumeHistory.map(point => ({
+      time: point.timestamp,
+      timeLabel: new Date(point.timestamp).toLocaleTimeString(),
+      volume: point.volume * 100, // Convert to percentage
+      volumeRaw: point.volume,
+    }));
+  }, [volumeHistory]);
 
   useEffect(() => {
     // Load saved settings and status
@@ -32,7 +53,17 @@ export default function Popup() {
     // Listen for volume updates from background
     const messageListener = (request: any) => {
       if (request.type === 'VOLUME_BROADCAST') {
-        setCurrentVolume(request.volume);
+        const volume = request.volume;
+        const timestamp = Date.now();
+        setCurrentVolume(volume);
+        
+        // Add to history
+        setVolumeHistory(prev => {
+          const newHistory = [...prev, { volume, timestamp }];
+          // Remove data points older than historyDuration
+          const cutoffTime = timestamp - historyDuration;
+          return newHistory.filter(point => point.timestamp > cutoffTime);
+        });
       }
     };
     chrome.runtime.onMessage.addListener(messageListener);
@@ -77,6 +108,7 @@ export default function Popup() {
       if (response.success) {
         setIsMonitoring(false);
         setCurrentVolume(0);
+        setVolumeHistory([]);
       }
     } catch (error) {
       console.error('Failed to stop monitoring:', error);
@@ -106,15 +138,73 @@ export default function Popup() {
       <h1>🎙️ Voice Monitor</h1>
 
       <div className="volume-meter">
-        <div className="volume-label">Current Volume</div>
-        <div className="volume-bar-container">
-          <div
-            className="volume-bar"
-            style={{
-              width: `${currentVolume * 100}%`,
-              backgroundColor: volumeColor,
-            }}
-          />
+        <div className="volume-label">
+          Volume Monitor (10m)
+          <span className="volume-percentage" style={{ color: volumeColor }}>
+            {(currentVolume * 100).toFixed(0)}%
+          </span>
+        </div>
+        {chartData.length > 0 ? (
+          <ResponsiveContainer width="100%" height={200}>
+            <AreaChart data={chartData} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
+              <defs>
+                <linearGradient id="volumeGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#2196F3" stopOpacity={0.3}/>
+                  <stop offset="95%" stopColor="#2196F3" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#E0E0E0" />
+              <XAxis 
+                dataKey="timeLabel" 
+                stroke="#666"
+                fontSize={10}
+                tick={{ fill: '#666' }}
+                interval="preserveStartEnd"
+              />
+              <YAxis 
+                domain={[0, 100]}
+                stroke="#666"
+                fontSize={10}
+                tick={{ fill: '#666' }}
+                label={{ value: 'Volume %', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fill: '#666' } }}
+              />
+              <Tooltip 
+                formatter={(value: number | undefined) => value !== undefined ? [`${value.toFixed(1)}%`, 'Volume'] : ['', '']}
+                labelFormatter={(label) => `Time: ${label}`}
+                contentStyle={{ backgroundColor: '#fff', border: '1px solid #ccc', borderRadius: '4px' }}
+              />
+              <ReferenceLine 
+                y={threshold * 100} 
+                stroke="#FF5722" 
+                strokeDasharray="5 5"
+                label={{ value: `Threshold: ${(threshold * 100).toFixed(0)}%`, position: 'top', fill: '#FF5722' }}
+              />
+              <Area
+                type="monotone"
+                dataKey="volume"
+                stroke="#2196F3"
+                strokeWidth={2}
+                fill="url(#volumeGradient)"
+                dot={false}
+                activeDot={{ r: 6, fill: volumeColor, stroke: volumeColor, strokeWidth: 2 }}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="volume-graph-empty">
+            {isMonitoring ? 'Listening...' : 'Start monitoring to see volume graph'}
+          </div>
+        )}
+        <div className="volume-status">
+          {currentVolume > threshold ? (
+            <span className="status-loud">🔊 Too Loud!</span>
+          ) : currentVolume > threshold * 0.8 ? (
+            <span className="status-warning">⚠️ Getting Loud</span>
+          ) : isMonitoring ? (
+            <span className="status-normal">✓ Normal</span>
+          ) : (
+            <span className="status-idle">Monitoring Off</span>
+          )}
         </div>
       </div>
 

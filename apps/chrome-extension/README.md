@@ -45,7 +45,8 @@ apps/chrome-extension/
 - ✅ Manifest V3 (latest standard)
 - ✅ Real-time voice monitoring in browser
 - ✅ Works with all video call platforms (Zoom, Meet, Teams, etc.)
-- ✅ Browser notifications
+- ✅ Smart notification system: alerts after 1 minute of continuous loud speaking
+- ✅ Browser notifications with priority alerts
 - ✅ Adjustable threshold settings
 
 ## Development

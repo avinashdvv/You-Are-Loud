@@ -2,7 +2,7 @@
 
 **Project:** Your Are Loud - Voice Monitoring Chrome Extension  
 **Version:** 1.0.0  
-**Last Updated:** 2026-01-31  
+**Last Updated:** 2026-02-05  
 **Manifest Version:** 3  
 **Minimum Chrome Version:** 109+
 
@@ -29,20 +29,21 @@
 ## Overview
 
 ### Purpose
-A Chrome extension that monitors microphone input during video calls and provides real-time visual and notification-based feedback when the user's voice exceeds a configurable threshold.
+A Chrome extension that monitors microphone input during video calls and provides real-time visual and notification-based feedback when the user's voice exceeds a configurable threshold for 1 minute continuously.
 
 ### Key Features
 - **Persistent Background Monitoring** - Continues even when popup is closed
-- **Real-time Volume Visualization** - Live volume meter in popup UI
-- **Visual Alert System** - Red overlay on active tab when speaking too loud
-- **Browser Notifications** - Native Chrome notifications with cooldown
-- **Configurable Threshold** - User-adjustable sensitivity slider
+- **Real-time Volume Graph** - Interactive chart showing 10-minute history (Recharts)
+- **Smart Notification System** - Alerts after 1 minute of continuous loud speaking
+- **Browser Notifications** - Native Chrome notifications with interaction requirement
+- **Configurable Threshold** - User-adjustable sensitivity slider with visual reference line
 - **Usage Statistics** - Warning count tracking
 - **State Persistence** - Remembers settings across sessions
 
 ### Technology Stack
 - **Language:** TypeScript
 - **UI Framework:** React 18
+- **Charting Library:** Recharts 3.7.0
 - **Build Tool:** Webpack 5
 - **Audio API:** Web Audio API (getUserMedia, AudioContext)
 - **Extension APIs:** Chrome Extension Manifest V3
@@ -61,10 +62,11 @@ A Chrome extension that monitors microphone input during video calls and provide
 │                        CHROME BROWSER                            │
 │                                                                  │
 │  ┌────────────────────────────────────────────────────────────┐ │
-│  │                     POPUP UI (React)                        │ │
+│  │                     POPUP UI (React + Recharts)              │ │
 │  │  ┌──────────────┐  ┌──────────────┐  ┌─────────────────┐  │ │
-│  │  │ Volume Meter │  │   Controls   │  │ Settings Panel  │  │ │
-│  │  │   Component  │  │  Start/Stop  │  │ Threshold Slider│  │ │
+│  │  │ Volume Graph │  │   Controls   │  │ Settings Panel  │  │ │
+│  │  │ (10m history)│  │  Start/Stop  │  │ Threshold Slider│  │ │
+│  │  │  Recharts    │  │              │  │                 │  │ │
 │  │  └──────────────┘  └──────────────┘  └─────────────────┘  │ │
 │  │           ↕ chrome.runtime.sendMessage()                   │ │
 │  └────────────────────────────────────────────────────────────┘ │
@@ -77,7 +79,8 @@ A Chrome extension that monitors microphone input during video calls and provide
 │  │  └─────────────┘  └──────────────┘  └──────────────────┘ │ │
 │  │  ┌─────────────┐  ┌──────────────┐  ┌──────────────────┐ │ │
 │  │  │Notification │  │   Storage    │  │  State Manager   │ │ │
-│  │  │  Handler    │  │   Manager    │  │                  │ │ │
+│  │  │  Handler     │  │   Manager    │  │                  │ │ │
+│  │  │ (1min timer) │  │              │  │                  │ │ │
 │  │  └─────────────┘  └──────────────┘  └──────────────────┘ │ │
 │  │           ↕ chrome.offscreen.createDocument()              │ │
 │  └────────────────────────────────────────────────────────────┘ │
@@ -95,20 +98,10 @@ A Chrome extension that monitors microphone input during video calls and provide
 │  │  │  • Get time domain data                              │  │ │
 │  │  │  • Calculate RMS                                     │  │ │
 │  │  │  • Normalize volume (0.0 - 1.0)                      │  │ │
-│  │  │  • Compare with threshold                            │  │ │
-│  │  │  • Send updates to background                        │  │ │
+│  │  │  • Track continuous loudness duration                │  │ │
+│  │  │  • Trigger notification after 1 minute              │  │ │
+│  │  │  • Send volume updates to background                 │  │ │
 │  │  └─────────────────────────────────────────────────────┘  │ │
-│  └────────────────────────────────────────────────────────────┘ │
-│                              ↕                                   │
-│  ┌────────────────────────────────────────────────────────────┐ │
-│  │           CONTENT SCRIPT (Injected into Web Pages)         │ │
-│  │  ┌───────────────────────────────────────────────────────┐│ │
-│  │  │     Red Overlay Manager                               ││ │
-│  │  │  • Creates/manages overlay DOM element               ││ │
-│  │  │  • Shows red flash on SHOW_RED_OVERLAY               ││ │
-│  │  │  • Auto-hides after 3 seconds                        ││ │
-│  │  │  • Non-intrusive (pointer-events: none)              ││ │
-│  │  └───────────────────────────────────────────────────────┘│ │
 │  └────────────────────────────────────────────────────────────┘ │
 │                                                                  │
 │  ┌────────────────────────────────────────────────────────────┐ │
@@ -122,10 +115,9 @@ A Chrome extension that monitors microphone input during video calls and provide
 
 | Component | Responsibility | Lifecycle | Access |
 |-----------|---------------|-----------|---------|
-| **Popup** | User interface, settings display | Ephemeral (closes) | User interaction |
-| **Background Service Worker** | Orchestration, message routing | Persistent | Always running |
-| **Offscreen Document** | Audio processing, microphone access | Persistent | Hidden page |
-| **Content Script** | Visual feedback overlay | Per-tab injection | Active tab only |
+| **Popup** | User interface, volume graph (Recharts), settings display | Ephemeral (closes) | User interaction |
+| **Background Service Worker** | Orchestration, message routing, notifications | Persistent | Always running |
+| **Offscreen Document** | Audio processing, microphone access, loudness timer | Persistent | Hidden page |
 
 ---
 
@@ -139,6 +131,7 @@ Provides the user interface for controlling and monitoring voice levels.
 #### Technology
 - React 18.2.0
 - TypeScript 5.3.3
+- Recharts 3.7.0 (charting library)
 - CSS Modules
 
 #### State Management
@@ -148,6 +141,12 @@ interface PopupState {
   isMonitoring: boolean;      // Monitoring active status
   threshold: number;          // 0.3 - 1.0
   warningCount: number;       // Total warnings triggered
+  volumeHistory: VolumeDataPoint[];  // Array of {volume, timestamp}
+}
+
+interface VolumeDataPoint {
+  volume: number;      // 0.0 - 1.0
+  timestamp: number;   // Date.now()
 }
 ```
 
@@ -196,21 +195,36 @@ function handleThresholdChange(e: ChangeEvent<HTMLInputElement>): void
 
 #### UI Components
 
-**Volume Meter**
+**Volume Graph (Recharts)**
 ```tsx
-<div className="volume-bar-container">
-  <div 
-    className="volume-bar"
-    style={{
-      width: `${currentVolume * 100}%`,
-      backgroundColor: volumeColor
-    }}
-  />
-</div>
+<ResponsiveContainer width="100%" height={200}>
+  <AreaChart data={chartData}>
+    <CartesianGrid strokeDasharray="3 3" />
+    <XAxis dataKey="timeLabel" />
+    <YAxis domain={[0, 100]} label={{ value: 'Volume %', angle: -90 }} />
+    <Tooltip formatter={(value) => [`${value.toFixed(1)}%`, 'Volume']} />
+    <ReferenceLine 
+      y={threshold * 100} 
+      stroke="#FF5722" 
+      strokeDasharray="5 5"
+      label={`Threshold: ${(threshold * 100).toFixed(0)}%`}
+    />
+    <Area
+      type="monotone"
+      dataKey="volume"
+      stroke="#2196F3"
+      fill="url(#volumeGradient)"
+      activeDot={{ r: 6, fill: volumeColor }}
+    />
+  </AreaChart>
+</ResponsiveContainer>
 ```
-- Green: volume < 80% of threshold
-- Yellow: volume between 80-100% of threshold  
-- Red: volume > threshold
+- Shows 10-minute history of volume data
+- Blue gradient fill under volume line
+- Red dashed reference line for threshold
+- Interactive tooltips on hover
+- Color-coded active dot (green/yellow/red based on threshold)
+- Responsive container adapts to popup size
 
 **Threshold Slider**
 ```tsx
@@ -291,18 +305,10 @@ async function handleSetThreshold(threshold: number): Promise<{ success: boolean
 ```typescript
 function showWarningNotification(): void
 ```
-1. Create Chrome notification with warning message
-2. Increment warning count in storage
-3. Respect cooldown period (handled in offscreen)
-
-**`changeTabColor(showRed: boolean)`**
-```typescript
-async function changeTabColor(showRed: boolean): Promise<void>
-```
-1. Query active tab with `chrome.tabs.query()`
-2. Inject content script if not already injected
-3. Send `SHOW_RED_OVERLAY` or `HIDE_OVERLAY` message to tab
-4. Error handling for injection failures
+1. Create Chrome notification with message: "You have been speaking too loud for 1 minute. Please lower your voice."
+2. Set `requireInteraction: true` so notification stays until dismissed
+3. Increment warning count in storage
+4. Cooldown period (60 seconds) is handled in offscreen document
 
 **`broadcastVolumeUpdate(volume: number)`**
 ```typescript
@@ -340,16 +346,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     
     case 'WARNING_TRIGGERED':
       showWarningNotification();
-      sendResponse({ success: true });
-      break;
-    
-    case 'SHOW_TAB_RED':
-      changeTabColor(true);
-      sendResponse({ success: true });
-      break;
-    
-    case 'HIDE_TAB_RED':
-      changeTabColor(false);
       sendResponse({ success: true });
       break;
   }
@@ -408,9 +404,9 @@ class OffscreenAudioMonitor {
   
   // Detection logic
   private thresholdDetector: ThresholdDetector;
-  private lastWarningTime: number = 0;
-  private warningCooldown: number = 3000; // ms
-  private wasOverThreshold: boolean = false;
+  private overThresholdStartTime: number | null = null;
+  private loudDurationThreshold: number = 60000; // 1 minute in milliseconds
+  private hasNotifiedForCurrentPeriod: boolean = false;
   
   constructor() {
     this.thresholdDetector = new ThresholdDetector(DEFAULT_VOLUME_THRESHOLD);
@@ -447,8 +443,7 @@ stopMonitoring(): void
 3. Disconnect microphone from analyser
 4. Stop all tracks on MediaStream
 5. Close AudioContext
-6. Send `HIDE_TAB_RED` message (clear overlay)
-7. Reset `wasOverThreshold` flag
+6. Reset tracking variables: `overThresholdStartTime = null`, `hasNotifiedForCurrentPeriod = false`
 
 **`processAudio()`**
 ```typescript
@@ -475,20 +470,33 @@ const analyze = () => {
   // Step 4: Send volume update to background
   this.sendVolumeUpdate(normalizedVolume);
   
-  // Step 5: Check threshold
+  // Step 5: Check threshold and track continuous loudness
   const isOverThreshold = this.thresholdDetector.exceedsThreshold(normalizedVolume);
+  const now = Date.now();
   
   if (isOverThreshold) {
-    if (!this.wasOverThreshold) {
-      // Just crossed threshold - show red immediately
-      this.sendTabColorChange(true);
+    // User is currently too loud
+    if (this.overThresholdStartTime === null) {
+      // Just started being too loud, record the start time
+      this.overThresholdStartTime = now;
+      this.hasNotifiedForCurrentPeriod = false;
+    } else {
+      // Check if user has been loud for 1 minute
+      const loudDuration = now - this.overThresholdStartTime;
+      
+      if (loudDuration >= this.loudDurationThreshold && !this.hasNotifiedForCurrentPeriod) {
+        // User has been loud for 1 minute continuously
+        this.showNotification();
+        this.hasNotifiedForCurrentPeriod = true;
+      }
     }
-    this.checkAndShowWarning(); // Respects cooldown
-    this.wasOverThreshold = true;
-  } else if (this.wasOverThreshold) {
-    // Volume dropped - hide red
-    this.sendTabColorChange(false);
-    this.wasOverThreshold = false;
+  } else {
+    // Volume is below threshold
+    if (this.overThresholdStartTime !== null) {
+      // User stopped being loud, reset timer
+      this.overThresholdStartTime = null;
+      this.hasNotifiedForCurrentPeriod = false;
+    }
   }
   
   // Step 6: Continue loop
@@ -500,22 +508,12 @@ analyze(); // Start the loop
 
 **Loop Frequency:** ~60 FPS (requestAnimationFrame rate)
 
-**`checkAndShowWarning()`**
-```typescript
-private checkAndShowWarning(): void
-```
-**Cooldown Logic:**
-```typescript
-const now = Date.now();
-if (now - this.lastWarningTime < this.warningCooldown) {
-  return; // Skip if within cooldown period
-}
-this.lastWarningTime = now;
-this.showNotification();
-```
-- Prevents notification spam
-- 3 second cooldown between notifications
-- Only updates `lastWarningTime` when notification actually sent
+**Continuous Loudness Tracking:**
+- Tracks when user first exceeds threshold (`overThresholdStartTime`)
+- Monitors duration of continuous loudness
+- Triggers notification only after 1 minute (60000ms) of continuous loudness
+- Resets timer immediately if volume drops below threshold
+- Prevents duplicate notifications with `hasNotifiedForCurrentPeriod` flag
 
 **`setThreshold()`**
 ```typescript
@@ -579,10 +577,12 @@ chrome.runtime.sendMessage({
 
 ---
 
-### 4. Content Script (`src/content/content-script.ts`)
+### 4. Content Script (`src/content/content-script.ts`) - DEPRECATED
 
-#### Purpose
-Injected into web pages to provide visual feedback (red overlay) when user is speaking too loud.
+**Note:** This component is no longer actively used. The red overlay functionality has been replaced with browser notifications. The content script is kept minimal for potential future features.
+
+#### Purpose (Historical)
+Previously injected into web pages to provide visual feedback (red overlay) when user was speaking too loud. This functionality has been removed in favor of browser notifications that trigger after 1 minute of continuous loud speaking.
 
 #### Global State
 ```typescript
@@ -689,10 +689,6 @@ await chrome.scripting.executeScript({
 | `VOLUME_UPDATE` | Offscreen → Background | `{ volume: number }` | `{ success }` | Report current volume |
 | `VOLUME_BROADCAST` | Background → Popup | `{ volume: number }` | None | Forward volume to UI |
 | `WARNING_TRIGGERED` | Offscreen → Background | None | `{ success }` | Threshold exceeded |
-| `SHOW_TAB_RED` | Offscreen → Background | None | `{ success }` | Show red overlay |
-| `HIDE_TAB_RED` | Offscreen → Background | None | `{ success }` | Hide red overlay |
-| `SHOW_RED_OVERLAY` | Background → Content | None | `{ success }` | Display overlay on page |
-| `HIDE_OVERLAY` | Background → Content | None | `{ success }` | Hide overlay on page |
 
 ### Message Flow Diagrams
 
@@ -724,28 +720,30 @@ Background responds to Popup
 Popup updates UI
 ```
 
-#### Threshold Exceeded
+#### Continuous Loudness Detection (1 Minute)
 
 ```
 Offscreen detects volume > threshold
   ↓
-Offscreen sends SHOW_TAB_RED
+Offscreen records overThresholdStartTime
+  ↓
+[Loop continues - volume stays above threshold]
+  ↓
+After 60 seconds of continuous loudness
+  ↓
+Offscreen sends WARNING_TRIGGERED
   ↓
 Background receives message
   ↓
-Background calls changeTabColor(true)
-  ↓
-Background queries active tab
-  ↓
-Background injects content script (if needed)
-  ↓
-Background sends SHOW_RED_OVERLAY to tab
-  ↓
-Content script shows red overlay
-  ↓
-[Parallel] Offscreen sends WARNING_TRIGGERED
-  ↓
 Background shows notification
+  ↓
+Notification: "You have been speaking too loud for 1 minute..."
+  ↓
+[If volume drops below threshold]
+  ↓
+Offscreen resets overThresholdStartTime
+  ↓
+Timer resets for next cycle
   ↓
 Background increments warning count
   ↓
@@ -1993,7 +1991,7 @@ export class AudioBufferProcessor {
 
 ## Change Log
 
-### Version 1.0.0 (2026-01-31)
+### Version 1.0.0 (2026-02-05)
 - Initial release
 - Background audio monitoring
 - Visual overlay feedback
@@ -2026,6 +2024,6 @@ export class AudioBufferProcessor {
 
 **Document Version:** 1.0  
 **Author:** Development Team  
-**Last Updated:** 2026-01-31  
+**Last Updated:** 2026-02-05  
 
 *This document should be updated whenever architectural changes are made to the Chrome extension.*

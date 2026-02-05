@@ -44,14 +44,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     // Show notification and increment warning count
     showWarningNotification();
     sendResponse({ success: true });
-  } else if (request.type === 'SHOW_TAB_RED') {
-    // Show red overlay on current tab
-    changeTabColor(true);
-    sendResponse({ success: true });
-  } else if (request.type === 'HIDE_TAB_RED') {
-    // Hide red overlay on current tab
-    changeTabColor(false);
-    sendResponse({ success: true });
   }
 
   return true;
@@ -158,8 +150,9 @@ function showWarningNotification() {
     type: 'basic',
     iconUrl: 'icons/icon-128.png',
     title: "🔊 You're Too Loud!",
-    message: 'Please lower your voice during the call',
+    message: 'You have been speaking too loud for 1 minute. Please lower your voice.',
     priority: 2,
+    requireInteraction: true, // Notification stays until user dismisses it
   });
 
   // Increment warning count
@@ -177,33 +170,6 @@ function broadcastVolumeUpdate(volume: number) {
   }).catch(() => {
     // Popup might be closed, that's okay
   });
-}
-
-// Function to change active tab color
-async function changeTabColor(showRed: boolean) {
-  try {
-    // Get the active tab
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    
-    if (!tab.id) return;
-
-    // Inject content script if not already injected
-    try {
-      await chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        files: ['content.js']
-      });
-    } catch (e) {
-      // Content script might already be injected, that's okay
-      console.log('Content script already injected or unable to inject');
-    }
-
-    // Send message to show/hide red overlay
-    const messageType = showRed ? 'SHOW_RED_OVERLAY' : 'HIDE_OVERLAY';
-    chrome.tabs.sendMessage(tab.id, { type: messageType });
-  } catch (error) {
-    console.error('Error changing tab color:', error);
-  }
 }
 
 // Restore monitoring state on startup

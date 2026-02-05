@@ -190,7 +190,7 @@ Thanks!
 ### Chrome Extension
 - **Store Title:** "Your Are Loud - Voice Volume Monitor for Video Calls"
 - **Key Feature:** Works with all browser-based video calls
-- **Screenshot Focus:** Popup, red overlay, notifications
+- **Screenshot Focus:** Popup with volume graph, notifications, threshold settings
 
 ### macOS App
 - **USP:** Native Swift, menu bar integration, system-wide monitoring

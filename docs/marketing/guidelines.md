@@ -80,7 +80,7 @@
 "Remote workers often don't realize they're speaking too loudly during video calls, disturbing household members and creating poor audio experiences for colleagues."
 
 #### Solution Statement
-"Your Are Loud provides real-time voice volume monitoring with immediate visual and notification alerts - all while processing everything locally to protect your privacy."
+"Your Are Loud provides real-time voice volume monitoring with smart notifications (after 1 minute of continuous loud speaking) and an interactive volume history graph - all while processing everything locally to protect your privacy."
 
 #### Unique Value Proposition
 "The only cross-platform voice monitor that gives you instant feedback without recording your voice - free, open source, and sponsor-supported."
@@ -1081,7 +1081,7 @@ Your Are Loud monitors your speaking volume in real-time and alerts you
 when you exceed your customizable threshold.
 
 ✅ Real-time volume meter
-✅ Visual red screen warnings
+✅ Real-time volume graph with 10-minute history
 ✅ Browser notifications
 ✅ Adjustable sensitivity
 ✅ Warning counter for self-improvement
@@ -1107,10 +1107,10 @@ Free forever. Open source. Sponsor-supported.
 ```
 
 **Screenshots Needed:**
-1. Main popup showing volume meter in action
-2. Settings panel with threshold slider
-3. Red screen overlay demonstration
-4. Browser notification example
+1. Main popup showing volume graph with 10-minute history
+2. Settings panel with threshold slider and reference line
+3. Volume graph demonstration showing real-time data
+4. Browser notification example (1-minute continuous loudness alert)
 5. Warning counter and stats
 
 **Promotional Assets:**
