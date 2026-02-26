@@ -1,9 +1,16 @@
 /**
- * Global Chrome extension API declaration.
- * Ensures the `chrome` global is typed so "Cannot find name 'chrome'" is resolved.
- * For full Chrome API typings, @types/chrome is in devDependencies.
+ * Global declarations: Chrome extension API + JSX.
+ * - chrome: ensures "Cannot find name 'chrome'" is resolved.
+ * - JSX: ensures "no interface 'JSX.IntrinsicElements' exists" when @types/react isn't resolved.
+ * For full typings, @types/chrome and @types/react are in devDependencies.
  */
 declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      [elemName: string]: Record<string, unknown>;
+    }
+  }
+
   interface ChromeRuntimeSendMessage {
     (message: unknown): Promise<Record<string, unknown> | undefined>;
     (message: unknown, responseCallback: (response: Record<string, unknown> | undefined) => void): void;
