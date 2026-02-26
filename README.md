@@ -18,10 +18,10 @@ This monorepo contains implementations for **all major platforms**:
 
 | Platform | Technology | Status | Location |
 |----------|-----------|--------|----------|
-| 🍎 **macOS** | Swift, SwiftUI | ✅ Complete | `apps/macos/` |
+| 🍎 **macOS** | Swift, SwiftUI | 📝 Skeleton | `apps/macos/` |
 | 🪟 **Windows** | C#, .NET MAUI | 📝 Skeleton | `apps/windows/` |
 | 📱 **iOS & Android** | React Native | 📝 Skeleton | `apps/mobile/` |
-| 🌐 **Chrome Extension** | TypeScript, Manifest V3 | 📝 Skeleton | `apps/chrome-extension/` |
+| 🌐 **Chrome Extension** | TypeScript, Manifest V3 | 📝 Work in progress | `apps/chrome-extension/` |
 
 ## 📁 Repository Structure
 
