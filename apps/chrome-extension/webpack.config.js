@@ -2,7 +2,11 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
+const projectRoot = __dirname;
+const monorepoRoot = path.resolve(projectRoot, '../..');
+
 module.exports = {
+  context: projectRoot,
   entry: {
     background: './src/background/service-worker.ts',
     popup: './src/popup/index.tsx',
@@ -10,7 +14,7 @@ module.exports = {
     offscreen: './src/offscreen/offscreen.ts',
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(projectRoot, 'dist'),
     filename: '[name].js',
     clean: true,
   },
@@ -28,7 +32,17 @@ module.exports = {
     ],
   },
   resolve: {
+    modules: [
+      'node_modules',
+      path.join(monorepoRoot, 'node_modules'),
+    ],
     extensions: ['.tsx', '.ts', '.js'],
+  },
+  resolveLoader: {
+    modules: [
+      'node_modules',
+      path.join(monorepoRoot, 'node_modules'),
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({

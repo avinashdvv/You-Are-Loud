@@ -170,7 +170,7 @@ export default function Popup() {
               />
               <Tooltip 
                 formatter={(value: number | undefined) => value !== undefined ? [`${value.toFixed(1)}%`, 'Volume'] : ['', '']}
-                labelFormatter={(label) => `Time: ${label}`}
+                labelFormatter={(label: React.ReactNode) => `Time: ${label}`}
                 contentStyle={{ backgroundColor: '#fff', border: '1px solid #ccc', borderRadius: '4px' }}
               />
               <ReferenceLine 
