@@ -1,6 +1,7 @@
+/// <reference path="../global.d.ts" />
 import React, { useState, useEffect, useMemo } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ReferenceLine, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
-import './Popup.css';
+import './Popup.scss';
 
 interface VolumeDataPoint {
   volume: number;
@@ -105,7 +106,7 @@ export default function Popup() {
   const stopMonitoring = async () => {
     try {
       const response = await chrome.runtime.sendMessage({ type: 'STOP_MONITORING' });
-      if (response.success) {
+      if (response?.success) {
         setIsMonitoring(false);
         setCurrentVolume(0);
         setVolumeHistory([]);
@@ -134,86 +135,89 @@ export default function Popup() {
     currentVolume > threshold * 0.8 ? '#FFC107' : '#4CAF50';
 
   return (
-    <div className="popup-container">
-      <h1>🎙️ Voice Monitor</h1>
+    <div className="ds-container">
+      <h1 className="ds-title">🎙️ Voice Monitor</h1>
 
-      <div className="volume-meter">
-        <div className="volume-label">
+      <div className="ds-card ds-section">
+        <div className="ds-card__header">
           Volume Monitor (10m)
-          <span className="volume-percentage" style={{ color: volumeColor }}>
+          <span className="ds-badge ds-badge--muted" style={{ color: volumeColor }}>
             {(currentVolume * 100).toFixed(0)}%
           </span>
         </div>
-        {chartData.length > 0 ? (
-          <ResponsiveContainer width="100%" height={200}>
-            <AreaChart data={chartData} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
-              <defs>
-                <linearGradient id="volumeGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#2196F3" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#2196F3" stopOpacity={0}/>
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E0E0E0" />
-              <XAxis 
-                dataKey="timeLabel" 
-                stroke="#666"
-                fontSize={10}
-                tick={{ fill: '#666' }}
-                interval="preserveStartEnd"
-              />
-              <YAxis 
-                domain={[0, 100]}
-                stroke="#666"
-                fontSize={10}
-                tick={{ fill: '#666' }}
-                label={{ value: 'Volume %', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fill: '#666' } }}
-              />
-              <Tooltip 
-                formatter={(value: number | undefined) => value !== undefined ? [`${value.toFixed(1)}%`, 'Volume'] : ['', '']}
-                labelFormatter={(label: React.ReactNode) => `Time: ${label}`}
-                contentStyle={{ backgroundColor: '#fff', border: '1px solid #ccc', borderRadius: '4px' }}
-              />
-              <ReferenceLine 
-                y={threshold * 100} 
-                stroke="#FF5722" 
-                strokeDasharray="5 5"
-                label={{ value: `Threshold: ${(threshold * 100).toFixed(0)}%`, position: 'top', fill: '#FF5722' }}
-              />
-              <Area
-                type="monotone"
-                dataKey="volume"
-                stroke="#2196F3"
-                strokeWidth={2}
-                fill="url(#volumeGradient)"
-                dot={false}
-                activeDot={{ r: 6, fill: volumeColor, stroke: volumeColor, strokeWidth: 2 }}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        ) : (
-          <div className="volume-graph-empty">
-            {isMonitoring ? 'Listening...' : 'Start monitoring to see volume graph'}
-          </div>
-        )}
-        <div className="volume-status">
-          {currentVolume > threshold ? (
-            <span className="status-loud">🔊 Too Loud!</span>
-          ) : currentVolume > threshold * 0.8 ? (
-            <span className="status-warning">⚠️ Getting Loud</span>
-          ) : isMonitoring ? (
-            <span className="status-normal">✓ Normal</span>
+        <div className="ds-card__body">
+          {chartData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={200}>
+              <AreaChart data={chartData} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
+                <defs>
+                  <linearGradient id="volumeGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#2196F3" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#2196F3" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E0E0E0" />
+                <XAxis 
+                  dataKey="timeLabel" 
+                  stroke="#666"
+                  fontSize={10}
+                  tick={{ fill: '#666' }}
+                  interval="preserveStartEnd"
+                />
+                <YAxis 
+                  domain={[0, 100]}
+                  stroke="#666"
+                  fontSize={10}
+                  tick={{ fill: '#666' }}
+                  label={{ value: 'Volume %', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fill: '#666' } }}
+                />
+                <Tooltip 
+                  formatter={(value: number | undefined) => value !== undefined ? [`${value.toFixed(1)}%`, 'Volume'] : ['', '']}
+                  labelFormatter={(label: React.ReactNode) => `Time: ${label}`}
+                  contentStyle={{ backgroundColor: '#fff', border: '1px solid #ccc', borderRadius: '4px' }}
+                />
+                <ReferenceLine 
+                  y={threshold * 100} 
+                  stroke="#FF5722" 
+                  strokeDasharray="5 5"
+                  label={{ value: `Threshold: ${(threshold * 100).toFixed(0)}%`, position: 'top', fill: '#FF5722' }}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="volume"
+                  stroke="#2196F3"
+                  strokeWidth={2}
+                  fill="url(#volumeGradient)"
+                  dot={false}
+                  activeDot={{ r: 6, fill: volumeColor, stroke: volumeColor, strokeWidth: 2 }}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
           ) : (
-            <span className="status-idle">Monitoring Off</span>
+            <div className="ds-empty-state">
+              {isMonitoring ? 'Listening...' : 'Start monitoring to see volume graph'}
+            </div>
+          )}
+        </div>
+        <div className={`ds-status ${currentVolume > threshold ? 'ds-status--loud' : currentVolume > threshold * 0.8 ? 'ds-status--warning' : isMonitoring ? 'ds-status--normal' : 'ds-status--idle'}`}>
+          {currentVolume > threshold ? (
+            <span>🔊 Too Loud!</span>
+          ) : currentVolume > threshold * 0.8 ? (
+            <span>⚠️ Getting Loud</span>
+          ) : isMonitoring ? (
+            <span>✓ Normal</span>
+          ) : (
+            <span>Monitoring Off</span>
           )}
         </div>
       </div>
 
-      <div className="threshold-control">
-        <label>
+      <div className="ds-field ds-section">
+        <label className="ds-label">
           Threshold: {threshold.toFixed(2)}
         </label>
         <input
           type="range"
+          className="ds-input-range"
           min="0.3"
           max="1.0"
           step="0.01"
@@ -222,17 +226,20 @@ export default function Popup() {
         />
       </div>
 
-      <div className="warning-count">
-        Warnings: <span className="count">{warningCount}</span>
+      <div className="ds-stack-row ds-section">
+        <span>
+          Warnings: <span className="ds-stack-row__value">{warningCount}</span>
+        </span>
         {warningCount > 0 && (
-          <button className="reset-btn" onClick={resetCount}>
+          <button type="button" className="ds-button ds-button--secondary" onClick={resetCount}>
             Reset
           </button>
         )}
       </div>
 
       <button
-        className={`monitor-button ${isMonitoring ? 'stop' : 'start'}`}
+        type="button"
+        className={`ds-button ds-button--block ${isMonitoring ? 'ds-button--danger' : 'ds-button--primary'}`}
         onClick={isMonitoring ? stopMonitoring : startMonitoring}
       >
         {isMonitoring ? '⏹ Stop Monitoring' : '▶️ Start Monitoring'}

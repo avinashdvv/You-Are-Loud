@@ -1,0 +1,24 @@
+// =============================================================================
+// Badge component – pill / inline value
+// =============================================================================
+
+@use '../tokens' as *;
+@use '../mixins' as *;
+
+.ds-badge {
+  @include ds-badge;
+}
+
+.ds-badge--muted {
+  @include ds-badge($ds-color-bg-muted);
+}
+
+.ds-badge--error {
+  @include ds-badge($ds-color-bg-muted);
+  color: $ds-color-error;
+}
+
+.ds-badge--success {
+  @include ds-badge($ds-color-bg-muted);
+  color: $ds-color-success;
+}

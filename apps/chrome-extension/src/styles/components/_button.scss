@@ -1,0 +1,33 @@
+// =============================================================================
+// Button component – primary, secondary (ghost), danger
+// =============================================================================
+
+@use '../tokens' as *;
+@use '../mixins' as *;
+
+.ds-button {
+  @include ds-button-base;
+}
+
+.ds-button--block {
+  @include ds-button-block;
+}
+
+.ds-button--primary {
+  @include ds-button-variant($ds-color-success);
+}
+
+.ds-button--danger {
+  @include ds-button-variant($ds-color-error);
+}
+
+.ds-button--secondary {
+  @include ds-button-ghost;
+}
+
+// Block + variant combinations (no extra rules needed; modifiers compose)
+
+.ds-button--block.ds-button--danger {
+  @include ds-button-block;
+  @include ds-button-variant($ds-color-error);
+}

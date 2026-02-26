@@ -1,0 +1,13 @@
+// =============================================================================
+// Design system entry – tokens, mixins, and all reusable components
+// =============================================================================
+
+@forward 'tokens';
+@use 'mixins';
+
+@use 'components/card';
+@use 'components/button';
+@use 'components/form';
+@use 'components/badge';
+@use 'components/status';
+@use 'components/layout';

@@ -1,0 +1,42 @@
+// =============================================================================
+// Layout components – container, section, title, empty state
+// =============================================================================
+
+@use '../tokens' as *;
+@use '../mixins' as *;
+
+.ds-container {
+  padding: $ds-space-stack-lg;
+}
+
+.ds-section {
+  margin-bottom: $ds-space-stack-lg;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.ds-title {
+  font-size: $ds-font-size-xl;
+  font-weight: $ds-font-weight-semibold;
+  text-align: center;
+  margin: 0 0 $ds-space-stack-lg 0;
+  color: $ds-color-text-primary;
+}
+
+.ds-empty-state {
+  @include ds-empty-state;
+}
+
+.ds-stack-row {
+  @include ds-flex-between;
+  font-size: $ds-font-size-md;
+  margin-bottom: $ds-space-stack-lg;
+}
+
+.ds-stack-row__value {
+  font-weight: $ds-font-weight-bold;
+  color: $ds-color-error;
+  font-size: $ds-font-size-lg;
+}

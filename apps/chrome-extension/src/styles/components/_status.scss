@@ -1,0 +1,37 @@
+// =============================================================================
+// Status component – semantic status text (loud, warning, normal, idle)
+// =============================================================================
+
+@use '../tokens' as *;
+@use '../mixins' as *;
+
+.ds-status {
+  @include ds-status-base;
+}
+
+.ds-status--loud {
+  @include ds-status-variant($ds-color-error);
+  animation: ds-blink 1s $ds-ease-in-out infinite;
+}
+
+.ds-status--warning {
+  @include ds-status-variant($ds-color-warning);
+}
+
+.ds-status--normal {
+  @include ds-status-variant($ds-color-success);
+}
+
+.ds-status--idle {
+  @include ds-status-variant($ds-color-text-muted);
+}
+
+@keyframes ds-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

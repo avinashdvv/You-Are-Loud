@@ -1,0 +1,12 @@
+// =============================================================================
+// Popup page – uses design system; only page-specific layout and overrides
+// =============================================================================
+
+@use '../styles/design-system' as *;
+
+// Page root
+body {
+  margin: 0;
+  font-family: $ds-font-family-base;
+  width: $ds-popup-width;
+}

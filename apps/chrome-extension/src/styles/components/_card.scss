@@ -1,0 +1,36 @@
+// =============================================================================
+// Card component – container with border, shadow, and padding
+// =============================================================================
+
+@use '../tokens' as *;
+@use '../mixins' as *;
+
+.ds-card {
+  @include ds-card;
+}
+
+.ds-card--compact {
+  @include ds-card($ds-space-inset-lg);
+}
+
+.ds-card__header {
+  @include ds-flex-between;
+  margin-bottom: $ds-space-gap-md;
+  font-size: $ds-font-size-base;
+  font-weight: $ds-font-weight-semibold;
+  color: $ds-color-text-primary;
+}
+
+.ds-card__body {
+  margin-bottom: $ds-space-2;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.ds-card__footer {
+  margin-top: $ds-space-2;
+  padding-top: $ds-space-2;
+  border-top: 1px solid $ds-color-border;
+}

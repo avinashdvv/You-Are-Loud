@@ -1,0 +1,23 @@
+// =============================================================================
+// Form components – label, input range, field group
+// =============================================================================
+
+@use '../tokens' as *;
+@use '../mixins' as *;
+
+.ds-field {
+  @include ds-field-stack;
+}
+
+.ds-label {
+  @include ds-label;
+}
+
+.ds-input-range {
+  width: 100%;
+  accent-color: $ds-color-info;
+}
+
+.ds-input-range--full-width {
+  width: 100%;
+}
