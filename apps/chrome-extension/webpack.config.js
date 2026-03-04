@@ -7,6 +7,9 @@ const monorepoRoot = path.resolve(projectRoot, '../..');
 
 module.exports = {
   context: projectRoot,
+  // Avoid eval so extension CSP (script-src 'self') is not violated
+  // TODO: Add source maps for debugging in local development
+  devtool: false,
   entry: {
     background: './src/background/service-worker.ts',
     popup: './src/popup/index.tsx',
