@@ -1,13 +1,17 @@
+---
+description: Project-wide rules for You Are Loud monorepo
+alwaysApply: true
+---
+
 # Your Are Loud - Cursor Rules
 
 ## About This File
 
-**IMPORTANT:** This project uses `.cursor/rules` (this file) for Cursor IDE rules.
+**IMPORTANT:** This project uses `.cursor/rules/` with `.mdc` files for Cursor IDE rules.
 
-- ✅ **Correct:** `.cursor/rules` (this file)
+- **Project-wide rules:** This file (`project.mdc`) — applies to the whole repo
+- **App-scoped rules:** Other `.mdc` files (e.g. `chrome-extension.mdc`) — apply only when working in that app
 - ❌ **Wrong:** `.cursorrules` (do NOT create this)
-
-If you need to update project rules, always update this file: `.cursor/rules`
 
 ---
 
@@ -317,7 +321,7 @@ cd apps/chrome-extension && npm test
 - Create docs outside `docs/` folder
 - Skip updating documentation
 - Copy code between platforms (use shared packages)
-- **Create `.cursorrules` file** (ALWAYS use `.cursor/rules` instead)
+- **Create `.cursorrules` file** (use `.cursor/rules/` with `.mdc` files instead)
 
 ## Architecture Rules
 
@@ -456,18 +460,12 @@ Update apps/mobile/README.md with brief mention + link
 
 ## Meta: About These Rules
 
-**This file location:** `.cursor/rules`
+**Location:** `.cursor/rules/` directory with `.mdc` files
 
-- This is the ONLY place for Cursor IDE project rules
+- **project.mdc** (this file) — project-wide, always applied
+- **chrome-extension.mdc** — applied only when working in `apps/chrome-extension/`
 - Do NOT create `.cursorrules` in the root
-- If you need to add rules, update THIS file
-- This file should be version controlled (git tracked)
-
-**Why `.cursor/rules` and not `.cursorrules`?**
-- `.cursor/rules` is the standard location for Cursor IDE
-- It was already present in this project
-- It's properly recognized by Cursor
-- Keeps project root clean
+- These files should be version controlled (git tracked)
 
 ## Remember
 
