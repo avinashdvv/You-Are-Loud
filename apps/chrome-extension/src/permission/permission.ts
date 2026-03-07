@@ -1,3 +1,5 @@
+import { MessageType } from '../constants/messages';
+
 /**
  * Runs in a tab so Chrome shows the native microphone permission prompt.
  * Popup cannot show the prompt; this page can. After user allows, close tab.
@@ -13,7 +15,7 @@ async function requestMicrophone() {
     statusEl.textContent = 'Microphone access granted.';
     statusEl.classList.add('success');
     if (hintEl) hintEl.style.display = 'block';
-    chrome.runtime.sendMessage({ type: 'MIC_PERMISSION_GRANTED' });
+    chrome.runtime.sendMessage({ type: MessageType.MIC_PERMISSION_GRANTED });
     window.close();
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);

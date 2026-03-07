@@ -1,6 +1,6 @@
-// Offscreen document for persistent audio monitoring
 import { calculateRMS, normalizeVolume } from '@your-are-loud/audio-processing';
 import { ThresholdDetector, DEFAULT_VOLUME_THRESHOLD } from '@your-are-loud/core';
+import { MessageType } from '../constants/messages';
 
 const AUDIO_MONITORING_INTERVAL = 100; // 60 * 1000
 class OffscreenAudioMonitor {
@@ -139,14 +139,14 @@ class OffscreenAudioMonitor {
   private showNotification(): void {
     // Send message to background script to show notification
     chrome.runtime.sendMessage({ 
-      type: 'WARNING_TRIGGERED'
+      type: MessageType.WARNING_TRIGGERED
     });
   }
 
   private sendVolumeUpdate(volume: number): void {
     // Send volume update to background script
     chrome.runtime.sendMessage({
-      type: 'VOLUME_UPDATE',
+      type: MessageType.VOLUME_UPDATE,
       volume: volume
     }).catch(() => {
       // Ignore errors if background script is not ready
@@ -169,7 +169,7 @@ const monitor = new OffscreenAudioMonitor();
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log('Offscreen received message:', request.type);
   
-  if (request.type === 'START_MONITORING') {
+  if (request.type === MessageType.START_MONITORING) {
     console.log('Starting monitoring in offscreen...');
     monitor.startMonitoring()
       .then(() => {
@@ -180,16 +180,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         console.error('Failed to start monitoring in offscreen:', error);
         sendResponse({ success: false, error: error.message });
       });
-    return true; // Will respond asynchronously
-  } else if (request.type === 'STOP_MONITORING') {
+    return true;
+  } else if (request.type === MessageType.STOP_MONITORING) {
     console.log('Stopping monitoring in offscreen...');
     monitor.stopMonitoring();
     sendResponse({ success: true, status: 'stopped' });
-  } else if (request.type === 'SET_THRESHOLD') {
+  } else if (request.type === MessageType.SET_THRESHOLD) {
     console.log('Setting threshold in offscreen:', request.threshold);
     monitor.setThreshold(request.threshold);
     sendResponse({ success: true });
-  } else if (request.type === 'GET_STATUS') {
+  } else if (request.type === MessageType.GET_STATUS) {
     const status = monitor.getStatus();
     console.log('Status requested:', status);
     sendResponse({ success: true, isMonitoring: status });

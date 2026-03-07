@@ -2,6 +2,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ReferenceLine, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
 import './Popup.scss';
+import { isMicrophonePermissionDenied, isMicrophonePermissionGranted, openPermissionTab } from '../utils';
+import { alerts } from '../utils/alerts';
+import { MessageType } from '../constants/messages';
+import { StorageKey } from '../constants/storage';
 
 interface VolumeDataPoint {
   volume: number;
@@ -31,29 +35,27 @@ export default function Popup() {
 
   useEffect(() => {
     // Load saved settings and status
-    chrome.storage.local.get(['threshold', 'warningCount', 'isMonitoring'], (result) => {
-      if (result.threshold !== undefined) {
-        setThreshold(result.threshold);
+    chrome.storage.local.get([StorageKey.THRESHOLD, StorageKey.WARNING_COUNT, StorageKey.IS_MONITORING], (result) => {
+      if (result[StorageKey.THRESHOLD] !== undefined) {
+        setThreshold(result[StorageKey.THRESHOLD]);
       }
-      if (result.warningCount !== undefined) {
-        setWarningCount(result.warningCount);
+      if (result[StorageKey.WARNING_COUNT] !== undefined) {
+        setWarningCount(result[StorageKey.WARNING_COUNT]);
       }
-      if (result.isMonitoring !== undefined) {
-        setIsMonitoring(result.isMonitoring);
+      if (result[StorageKey.IS_MONITORING] !== undefined) {
+        setIsMonitoring(result[StorageKey.IS_MONITORING]);
       }
     });
 
-    // Get current status from background
-    chrome.runtime.sendMessage({ type: 'GET_STATUS' }, (response) => {
+    chrome.runtime.sendMessage({ type: MessageType.GET_STATUS }, (response) => {
       if (response) {
         setIsMonitoring(response.isMonitoring);
         setCurrentVolume(response.currentVolume || 0);
       }
     });
 
-    // Listen for volume updates from background
     const messageListener = (request: any) => {
-      if (request.type === 'VOLUME_BROADCAST') {
+      if (request.type === MessageType.VOLUME_BROADCAST) {
         const volume = request.volume;
         const timestamp = Date.now();
         setCurrentVolume(volume);
@@ -69,10 +71,9 @@ export default function Popup() {
     };
     chrome.runtime.onMessage.addListener(messageListener);
 
-    // Listen for storage changes (warning count updates)
     const storageListener = (changes: any) => {
-      if (changes.warningCount) {
-        setWarningCount(changes.warningCount.newValue);
+      if (changes[StorageKey.WARNING_COUNT]) {
+        setWarningCount(changes[StorageKey.WARNING_COUNT].newValue);
       }
     };
     chrome.storage.onChanged.addListener(storageListener);
@@ -89,19 +90,12 @@ export default function Popup() {
       // if we get a permission error, open a tab where the prompt will show.
       let micGranted = false;
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        stream.getTracks().forEach((track) => track.stop());
-        micGranted = true;
+        micGranted = await isMicrophonePermissionGranted();
       } catch (popupErr) {
         const msg = (popupErr as Error).message || '';
-        if (/permission|notallowed|denied|dismissed|blocked/i.test(msg)) {
-          chrome.tabs.create({ url: chrome.runtime.getURL('permission.html') });
-          alert(
-            'A new tab opened to request microphone access.\n\n' +
-              '1. In that tab, click "Allow" when Chrome asks for the microphone.\n' +
-              '2. The tab will close automatically.\n' +
-              '3. Return here and click "Start Monitoring" again.'
-          );
+        if (isMicrophonePermissionDenied(msg)) {
+          alerts.micPermissionOpenedTab();
+          await openPermissionTab();
           return;
         }
         throw popupErr;
@@ -110,7 +104,7 @@ export default function Popup() {
       if (!micGranted) return;
 
       console.log('Requesting to start monitoring...');
-      const response = await chrome.runtime.sendMessage({ type: 'START_MONITORING' });
+      const response = await chrome.runtime.sendMessage({ type: MessageType.START_MONITORING });
       console.log('Response from background:', response);
 
       if (response && response.success) {
@@ -119,18 +113,18 @@ export default function Popup() {
       } else {
         const errorMsg = response?.error || 'Unknown error';
         console.error('Failed to start monitoring:', errorMsg);
-        alert('Failed to start monitoring:\n\n' + errorMsg);
+        alerts.startMonitoringFailed(errorMsg);
       }
     } catch (error) {
       const err = error as Error;
       console.error('Error starting monitoring:', err);
-      alert('Error: ' + err.message);
+      alerts.unexpectedError(err.message);
     }
   };
 
   const stopMonitoring = async () => {
     try {
-      const response = await chrome.runtime.sendMessage({ type: 'STOP_MONITORING' });
+      const response = await chrome.runtime.sendMessage({ type: MessageType.STOP_MONITORING });
       if (response?.success) {
         setIsMonitoring(false);
         setCurrentVolume(0);
@@ -144,15 +138,12 @@ export default function Popup() {
   const handleThresholdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newThreshold = parseFloat(e.target.value);
     setThreshold(newThreshold);
-    chrome.runtime.sendMessage({ 
-      type: 'SET_THRESHOLD', 
-      threshold: newThreshold 
-    });
+    chrome.runtime.sendMessage({ type: MessageType.SET_THRESHOLD, threshold: newThreshold });
   };
 
   const resetCount = () => {
     setWarningCount(0);
-    chrome.storage.local.set({ warningCount: 0 });
+    chrome.storage.local.set({ [StorageKey.WARNING_COUNT]: 0 });
   };
 
   const volumeColor = 

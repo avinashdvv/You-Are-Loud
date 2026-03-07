@@ -1,5 +1,6 @@
 import { calculateRMS, normalizeVolume } from '@your-are-loud/audio-processing';
 import { ThresholdDetector, DEFAULT_VOLUME_THRESHOLD } from '@your-are-loud/core';
+import { MessageType } from '../constants/messages';
 
 export class AudioMonitor {
   private audioContext: AudioContext | null = null;
@@ -105,8 +106,8 @@ export class AudioMonitor {
 
   private sendTabColorChange(showRed: boolean): void {
     // Send message to background to change tab color
-    chrome.runtime.sendMessage({ 
-      type: showRed ? 'SHOW_TAB_RED' : 'HIDE_TAB_RED'
+    chrome.runtime.sendMessage({
+      type: showRed ? MessageType.SHOW_TAB_RED : MessageType.HIDE_TAB_RED,
     }).catch(() => {
       // Ignore errors if background script is not ready
     });
@@ -133,7 +134,7 @@ export class AudioMonitor {
     });
 
     // Send message to background script
-    chrome.runtime.sendMessage({ type: 'WARNING_TRIGGERED' });
+    chrome.runtime.sendMessage({ type: MessageType.WARNING_TRIGGERED });
   }
 
   setThreshold(threshold: number): void {
