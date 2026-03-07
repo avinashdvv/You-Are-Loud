@@ -7,14 +7,15 @@ const monorepoRoot = path.resolve(projectRoot, '../..');
 
 module.exports = {
   context: projectRoot,
-  // Avoid eval so extension CSP (script-src 'self') is not violated
-  // TODO: Add source maps for debugging in local development
+  mode: 'production',
+  // No eval - required for Chrome extension CSP (script-src 'self')
   devtool: false,
   entry: {
     background: './src/background/service-worker.ts',
     popup: './src/popup/index.tsx',
     content: './src/content/content-script.ts',
     offscreen: './src/offscreen/offscreen.ts',
+    permission: './src/permission/permission.ts',
   },
   output: {
     path: path.resolve(projectRoot, 'dist'),
@@ -57,6 +58,11 @@ module.exports = {
       template: './src/offscreen/offscreen.html',
       filename: 'offscreen.html',
       chunks: ['offscreen'],
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/permission/permission.html',
+      filename: 'permission.html',
+      chunks: ['permission'],
     }),
     new CopyWebpackPlugin({
       patterns: [

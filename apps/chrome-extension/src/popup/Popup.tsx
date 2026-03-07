@@ -85,21 +85,46 @@ export default function Popup() {
 
   const startMonitoring = async () => {
     try {
+      // Chrome does not show the native mic prompt in extension popups. Try popup first;
+      // if we get a permission error, open a tab where the prompt will show.
+      let micGranted = false;
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        stream.getTracks().forEach((track) => track.stop());
+        micGranted = true;
+      } catch (popupErr) {
+        const msg = (popupErr as Error).message || '';
+        if (/permission|notallowed|denied|dismissed|blocked/i.test(msg)) {
+          chrome.tabs.create({ url: chrome.runtime.getURL('permission.html') });
+          alert(
+            'A new tab opened to request microphone access.\n\n' +
+              '1. In that tab, click "Allow" when Chrome asks for the microphone.\n' +
+              '2. The tab will close automatically.\n' +
+              '3. Return here and click "Start Monitoring" again.'
+          );
+          return;
+        }
+        throw popupErr;
+      }
+
+      if (!micGranted) return;
+
       console.log('Requesting to start monitoring...');
       const response = await chrome.runtime.sendMessage({ type: 'START_MONITORING' });
       console.log('Response from background:', response);
-      
+
       if (response && response.success) {
         setIsMonitoring(true);
         console.log('Monitoring started successfully');
       } else {
         const errorMsg = response?.error || 'Unknown error';
         console.error('Failed to start monitoring:', errorMsg);
-        alert('Failed to start monitoring:\n\n' + errorMsg + '\n\nCheck the extension service worker console for details.');
+        alert('Failed to start monitoring:\n\n' + errorMsg);
       }
     } catch (error) {
-      console.error('Error starting monitoring:', error);
-      alert('Error: ' + (error as Error).message + '\n\nMake sure:\n1. Chrome is version 109+\n2. Microphone permission is granted\n3. Check service worker console for errors');
+      const err = error as Error;
+      console.error('Error starting monitoring:', err);
+      alert('Error: ' + err.message);
     }
   };
 
